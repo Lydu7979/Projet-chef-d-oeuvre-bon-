@@ -7,7 +7,7 @@ en fonction de la météo (pluie, vent, ensoleillement).
 
 # Prerequisites
 
-Installation des librairies fbprophet (pour l'application) ,et des librairies dédiées au modèle ARIMA.
+Installation des librairies fbprophet,et des librairies dédiées au modèle ARIMA.
 
 # ETAPE 1 : Scrapping et DATA preprocessing
 
@@ -26,4 +26,4 @@ Pour les 2 premiers modèles, prédiction du prix et de la production dans 7 jou
 
 # ETAPE 3: Application
 
-L'application affichera la prédiction du prix et de la production de tomates dans 7 jours, avec le modèle prophet et la librairie Streamlit.
+L'application affichera la prédiction du prix et de la production de tomates dans 7 jours, avec le modèle ARIMA et la librairie Streamlit.
