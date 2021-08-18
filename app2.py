@@ -48,6 +48,8 @@ def is_well_logged(username, password):
 		return True
 
 
+
+
 #Condition pour accéder l'application
 S = is_well_logged(username, password)
 if S == True:
@@ -104,11 +106,13 @@ if S == True:
 	dataset  = ('TM','TM2','TM3', 'TM4', 'TM5', 'TM6', 'TM7', 'TM8', 'TM9', 'TM10', 'TM11', 'TM12', 'TM13', 'TM14')
 
 	option = st.selectbox('Choisir le dataset pour les prédictions',dataset)
+	st.info("Ici, vous pourrez choisir le dataset que vous souhaitez.")
 	DATA_URL =('./DATA/'+option+'.csv')
 
 
 	n = st.number_input('Mettre le nombre:') # n correspond au nombre de jours que l'utilisateur choisira pour les prédictions
-	st.write('le nombre choisi est:', n)
+	st.info("Ici, vous pourrez choisir le nombre de jours, que vous voulez pour la prédiction du prix et de la production.")
+	st.write('le nombre de jours choisis pour les prédictions, est:', n)
 	period = int(n)
 
 
