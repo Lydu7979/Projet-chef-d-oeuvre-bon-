@@ -88,7 +88,7 @@ if S == True:
 	st.info("Ici, le client a accès à la base de données.")
 	#DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
 	#                             'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
-	#DT.to_csv('DATA/TM14.csv')                              
+	#DT.to_csv('DATA/TM15.csv')                              
 
 	st.write("Base de données concernant le prix et la production")
 
@@ -103,10 +103,10 @@ if S == True:
 
 
 
-	dataset  = ('TM','TM2','TM3', 'TM4', 'TM5', 'TM6', 'TM7', 'TM8', 'TM9', 'TM10', 'TM11', 'TM12', 'TM13', 'TM14')
+	dataset  = ('TM','TM2','TM3', 'TM4', 'TM5', 'TM6', 'TM7', 'TM8', 'TM9', 'TM10', 'TM11', 'TM12', 'TM13', 'TM14', 'TM15')
 
 	option = st.selectbox('Choisir le dataset pour les prédictions',dataset)
-	st.info("Ici, vous pourrez choisir le dataset que vous souhaitez.")
+	st.info("Ici, vous pourrez choisir le dataset que vous souhaitez. Le dernier dataset contient les données les plus récentes.")
 	DATA_URL =('./DATA/'+option+'.csv')
 
 
@@ -124,9 +124,9 @@ if S == True:
 
 
 
-	data_load_state = st.text('Téléchargement des données...')
+	#data_load_state = st.text('Téléchargement des données...')
 	data = load_data()
-	data_load_state.text('Téléchargement des données... terminé!')
+	#data_load_state.text('Téléchargement des données... terminé!')
 
 
 
@@ -140,6 +140,7 @@ if S == True:
 	print("*"*20)
 	st.write("Représentation du prix (en haut) et de la production (en bas)")
 	st.line_chart(Prix)
+	st.info("Il s'agit de l'évolution du prix au kilo des tomates au cours du temps.")
 	print("*"*20)
 	print(type(data))
 	prix = pd.DataFrame({"prix":list(Prix)})
@@ -150,6 +151,7 @@ if S == True:
 	#st.bar_chart(Prix)
 
 	st.line_chart(Production)
+	st.info("Il s'agit de l'évolution du production de tomates en tonnes au cours du temps.")
 	# st.dataframe(pd.DataFrame({"production":list(Production)}))
 
 #modèles
@@ -162,7 +164,7 @@ if S == True:
 
 
 
-	Date = st.date_input('Insérer une date (ex: 2021-07-09): ')
+	Date = st.date_input('Choisir une date (ex: 2021-07-09): ')
 	st.info("En cliquant sur l'encadré gris foncé, vous pouvez choisir et cliquer la date que vous souhaitez.")
 	st.write("La date choisie est:", Date)
 
@@ -174,8 +176,10 @@ if S == True:
 	#st.table(df_forecast)
 	n_prix = pd.DataFrame({"Date":pd.date_range(start=Date, periods=period, freq='D'), 'prix dans '+ str(n)+'jours' :list(forecast)})
 	st.dataframe(n_prix)
+	st.info("Vous verrez un tableau avec les dates (en commençant par celle que vous avez choisie), et des prédicitons du prix par rapport aux dates, et au nombre de jours choisis.")
 	df_forecast.to_csv("Forecast.csv")
 	st.line_chart(df_forecast)
+	st.info("Vous verrez une représentation graphique des données présentes dans le tableau ci-dessus.")
 	
 
 	forecast2,err,ci = results2.forecast(steps= period, alpha = 0.05)
@@ -184,8 +188,10 @@ if S == True:
 	#st.table(df_forecast2)
 	n_pro = pd.DataFrame({"Date":pd.date_range(start=Date, periods=period, freq='D'),'production dans '+ str(n)+'jours' :list(forecast2)})
 	st.dataframe(n_pro)
+	st.info("Vous verrez un tableau avec les dates (en commençant par celle que vous avez choisie), et des prédicitons de la production par rapport aux dates, et au nombre de jours choisis.")
 	df_forecast2.to_csv("Forecast2.csv")
 	st.line_chart(df_forecast2)
+	st.info("Vous verrez une représentation graphique des données présentes dans le tableau ci-dessus.")
 
 
 	#if st.checkbox('Show forecast data'):
@@ -215,6 +221,7 @@ if S == True:
 	fig2 = pd.concat([Production,forcast2])
 	
 	
+	
 
 	st.write("Représentation du prix avec les données prédites")
 	st.line_chart(fig1)
@@ -233,9 +240,10 @@ else:
 	st.subheader("Créer votre compte")
 	n_user = st.text_input("Nom_utilisateur")
 	n_pass = st.text_input("Mot_de_passe", type = 'password')
+	st.info("Une fois votre nom d'utilisateur et votre mot de passe créés, cliquez sur Nouveau compte.")
 	if st.button("Nouveau compte"):
 		create_usertable()
 		add_userdata(n_user,n_pass)
 
 		st.success("Vous avez créé votre compte.")
-		
+		st.info("Connectez-vous, sur la barre de gauche.")
