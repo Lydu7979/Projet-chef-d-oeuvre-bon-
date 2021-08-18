@@ -37,7 +37,7 @@ def csv_downloader(data):
 st.sidebar.subheader("Création compte")
 username = st.sidebar.text_input("Nom d'utilisateur")
 password = st.sidebar.text_input("Mot de passe", type = 'password')
-
+st.info("Une fois connecté; vous aurez accès à l'application.")
 #Condition pour accéder l'application
 @st.cache
 def is_well_logged(username, password):
