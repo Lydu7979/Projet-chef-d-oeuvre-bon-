@@ -92,7 +92,7 @@ if S == True:
 	st.info("Ici, le client a accès à la base de données.")
 	#DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
 	#                             'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
-	#DT.to_csv('DATA/TM15.csv')                              
+	#DT.to_csv('DATA/TM15.csv',index = False)                              
 
 	st.write("Base de données concernant le prix et la production")
 
@@ -105,15 +105,15 @@ if S == True:
 	st.info("Contrairement à la première base de données, le client verra uniquement la date, avec le prix, la production et l'id.")
 
 			
-	dataset  = ('TM','TM2','TM3', 'TM4', 'TM5', 'TM6', 'TM7', 'TM8', 'TM9', 'TM10', 'TM11', 'TM12', 'TM13', 'TM14', 'TM15')
+	
 
-	option = st.selectbox('Choisir le dataset pour les prédictions',dataset)
-	st.info("Ici, vous pourrez choisir le dataset que vous souhaitez. Le dernier dataset contient les données les plus récentes.")
-	DATA_URL =('./DATA/'+option+'.csv')
+	
+	
+	DATA_URL =('./DATA/TM15.csv')
 
 
-	n = st.number_input('Mettre le nombre:') # n correspond au nombre de jours que l'utilisateur choisira pour les prédictions
-	st.info("Ici, vous pourrez choisir le nombre de jours, que vous voulez pour la prédiction du prix et de la production.")
+	n = st.slider('Nombre de jours pour les prédictions:',1,30) # n correspond au nombre de jours que l'utilisateur choisira pour les prédictions
+	st.info("Ici, vous pourrez choisir le nombre de jours (entre 1 et 30), que vous voulez pour la prédiction du prix et de la production.")
 	st.write('le nombre de jours choisis pour les prédictions, est:', n)
 	period = int(n)
 
@@ -137,12 +137,15 @@ if S == True:
 	
 	data = data.set_index(['Date'])
 
+	data.rename(columns={"Production quantité tonne(s)": "Production en tonnes"},inplace=True)
+	data = data.drop(columns=["Unnamed: 0"])
+	st.write(data.columns)
 	Prix = data['prix moyen au kg']
-	Production =  data['Production quantité \ntonne(s)']
+	Production =  data['Production en tonnes']
 				
 	scaler = MinMaxScaler()
 				
-	data[['prix_n', 'production_n']] = scaler.fit_transform(data[['prix moyen au kg', 'Production quantité \ntonne(s)']])
+	data[['prix_n', 'production_n']] = scaler.fit_transform(data[['prix moyen au kg', 'Production en tonnes']])
 	#st.dataframe(data)
 
 			
@@ -230,7 +233,7 @@ if S == True:
 	del forcast['Date']
 	#st.line_chart(forcast)
 			
-	forcast2.rename(columns={"Unnamed: 0": "Date",'Production dans '+ str(n)+'jours':"Production quantité \ntonne(s)"},inplace=True)
+	forcast2.rename(columns={"Unnamed: 0": "Date",'Production dans '+ str(n)+'jours':"Production en tonnes"},inplace=True)
 	forcast2.head()
 	forcast2['Date'] = pd.to_datetime(forcast2['Date'],infer_datetime_format=True)
 	forcast2.index=forcast2['Date']
