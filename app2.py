@@ -24,6 +24,7 @@ import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler
 import pickle
 from statsmodels.tsa.arima_model import ARIMAResults
+import datetime
 # from pages.dowload_data import download
 logging.basicConfig(filename='demo.log')
 logging.debug('This message should go to the log file')
@@ -78,8 +79,9 @@ if S == True:
 	#image = Image.open(file) 
 	st.image(file)
 	st.markdown("L'application qui vous aide à prédire le prix de tomates au kilo, et la production dans le futur.")
-	st.info("Dans un premier temps, vous verrez les bases de données avec les informations. Ensuite vous pourrez ensuite choisir le nombre de jours, et la date pour les prédicitions.")			
-	st.write("Base de données Mongodb")
+	st.info("Dans un premier temps, vous verrez les bases de données (sous forme de tableau) avec les informations. Ensuite, vous pourrez ensuite choisir le nombre de jours, et la date pour les prédicitions.")			
+	st.subheader("Bases de données Mongodb")
+	st.info("Ici vous pourrez sélectionner la base de donnée que vous voulez voir.")
 	client = get_client_mongodb()
 
 	db = client.Tomates_meteo_Centre5
@@ -87,22 +89,40 @@ if S == True:
 
 	Dat = pd.DataFrame(list(mycl.find()))
 	Dat = Dat.drop_duplicates(subset= ['index'])
-	st.dataframe(Dat)
-	st.markdown("L'application affiche la base de données sous forme de dataframe.")
-	st.info("Ici, le client a accès à la base de données.")
-	#DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
-	#                             'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
-	#DT.to_csv('DATA/TM15.csv',index = False)                              
-
-	st.write("Base de données concernant le prix et la production")
-
+	
 	db2 = client.Tomates_prix_production_Centre
 	mycl2 = db2["donnees"]
 
 	Dat2 = pd.DataFrame(list(mycl2.find()))
 	Dat2 = Dat2.drop_duplicates(subset= ['index'])
-	st.dataframe(Dat2)
-	st.info("Contrairement à la première base de données, le client verra uniquement la date, avec le prix, la production et l'id.")
+	
+
+	st.dataframe(Dat)
+	st.info("Ici, Vous verrez l'ensemble de la base des données.")
+
+	
+	#st.dataframe(Dat2)
+	#st.info("Ici, vous verrez la base de données avec uniquement la date,le prix, la production et l'id.")
+
+
+
+	#st.dataframe(Dat)
+
+	#db2 = client.Tomates_prix_production_Centre
+	#mycl2 = db2["donnees"]
+
+	#Dat2 = pd.DataFrame(list(mycl2.find()))
+	#Dat2 = Dat2.drop_duplicates(subset= ['index'])
+	
+	#st.info("Ici, le client a accès à la base de données.")
+	#DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
+	#                             'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
+	#DT.to_csv('DATA/TM15.csv',index = False)                              
+
+	#st.write("Base de données concernant le prix et la production")
+
+	#st.dataframe(Dat2)
+	#st.info("Contrairement à la première base de données, le client verra uniquement la date, avec le prix, la production et l'id.")
 
 	DATA_URL =('./DATA/TM15.csv')
 
@@ -141,21 +161,22 @@ if S == True:
 				
 	scaler = MinMaxScaler()
 				
-	data[['prix_n', 'production_n']] = scaler.fit_transform(data[['prix moyen au kg', 'Production en tonnes']])
+	data[['prix_n', 'production_n', 'ensoleillement']] = scaler.fit_transform(data[['prix moyen au kg', 'Production en tonnes','Ensoleillement en min']])
 	#st.dataframe(data)
 
 	fig = plt.figure(figsize=(10,5))
 	plt.plot(data.prix_n, label="prix normalisé", color = 'darkviolet') # k b r y g m c C0 - C5
 	plt.plot(data.production_n, label="production normalisée", color = 'gold')
+	plt.plot(data.ensoleillement, label="durée de l'ensoleillement", color = 'red')
 	plt.title("Représentation du prix au kilo et de la production")
-	plt.xlabel("Année")
 	plt.legend(loc="upper right")
 	plt.grid(True)
 	st.pyplot(fig)
+	
 			
 			
 	#st.line_chart(Prix)
-	st.info("Il s'agit de l'évolution du prix au kilo des tomates et de la production de tomates au cours du temps. Il a fallu normaliser le prix et la production car les unités n'étaient pas les mêmes. D'ou les valeurs comprises entre 0 et 1, sur le graphe.")
+	st.info("Il s'agit de l'évolution du prix au kilo des tomates, de la production de tomates, et de la durée de l'ensoleillement au cours du temps. Il a fallu normaliser le prix et la production car les unités n'étaient pas les mêmes. D'ou les valeurs comprises entre 0 et 1, sur le graphe.")
 	
 	#print("*"*20)
 	#print(type(data))
@@ -181,18 +202,19 @@ if S == True:
 
 
 
-	Date = st.date_input('Choisir une date: ')
-	st.info("En cliquant sur l'encadré gris foncé, vous pouvez choisir et cliquer la date que vous souhaitez.")
-	st.write("La date choisie est:", Date)
-
+	#Date = st.date_input('Choisir une date: ')
+	#st.info("En cliquant sur l'encadré gris foncé, vous pouvez choisir et cliquer la date que vous souhaitez.")
+	#st.write("La date choisie est:", Date)
+    
+	
 
 
 	forecast,err,ci = mod.forecast(steps= period, alpha = 0.05)
 
-	df_forecast = pd.DataFrame({'Prix dans '+ str(n) +'jours' :forecast},index=pd.date_range(start=Date, periods=period, freq='D'))
+	df_forecast = pd.DataFrame({'Prix dans '+ str(n) +'jours' :forecast},index=pd.date_range(start=datetime.date.today(), periods=period, freq='D'))
 			
 	#st.table(df_forecast)
-	n_prix = pd.DataFrame({"Date":pd.date_range(start=Date, periods=period, freq='D'), 'prix dans '+ str(n)+'jours' :list(forecast)})
+	n_prix = pd.DataFrame({"Date":pd.date_range(start=datetime.date.today(), periods=period, freq='D'), 'prix dans '+ str(n)+'jours' :list(forecast)})
 	st.dataframe(n_prix)
 	st.info("Vous verrez un tableau avec les dates (en commençant par celle que vous avez choisie), et des prédicitons du prix par rapport aux dates, et au nombre de jours choisis.")
 	df_forecast.to_csv("Forecast.csv")
@@ -201,10 +223,10 @@ if S == True:
 			
 
 	forecast2,err,ci = mod2.forecast(steps= period, alpha = 0.05)
-	df_forecast2 = pd.DataFrame({'Production dans '+ str(n)+'jours' :forecast2},index=pd.date_range(start=Date, periods=period, freq='D'))
+	df_forecast2 = pd.DataFrame({'Production dans '+ str(n)+'jours' :forecast2},index=pd.date_range(start=datetime.date.today(),periods=period, freq='D'))
 			
 	#st.table(df_forecast2)
-	n_pro = pd.DataFrame({"Date":pd.date_range(start=Date, periods=period, freq='D'),'production dans '+ str(n)+'jours' :list(forecast2)})
+	n_pro = pd.DataFrame({"Date":pd.date_range(start=datetime.date.today(), periods=period, freq='D'),'production dans '+ str(n)+'jours' :list(forecast2)})
 	st.dataframe(n_pro)
 	st.info("Vous verrez un tableau avec les dates (en commençant par celle que vous avez choisie), et des prédicitons de la production par rapport aux dates, et au nombre de jours choisis.")
 	df_forecast2.to_csv("Forecast2.csv")
@@ -226,7 +248,7 @@ if S == True:
 	del forcast['Date']
 	#st.line_chart(forcast)
 			
-	forcast2.rename(columns={"Unnamed: 0": "Date",'Production dans '+ str(n)+'jours':"Production en tonnes"},inplace=True)
+	forcast2.rename(columns={"Unnamed: 0": "Date",'Production dans '+ str(n) +'jours':"Production en tonnes"},inplace=True)
 	forcast2.head()
 	forcast2['Date'] = pd.to_datetime(forcast2['Date'],infer_datetime_format=True)
 	forcast2.index=forcast2['Date']
