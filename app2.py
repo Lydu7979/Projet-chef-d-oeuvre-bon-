@@ -41,7 +41,7 @@ def csv_downloader(data):
 st.sidebar.subheader("Création compte")
 username = st.sidebar.text_input("Nom d'utilisateur")
 password = st.sidebar.text_input("Mot de passe", type = 'password')
-st.sidebar.info("Une fois connecté. vous aurez accès à l'application.")
+st.sidebar.info("Une fois connecté(e). vous aurez accès à l'application.")
 #Condition pour accéder l'application
 @st.cache
 def is_well_logged(username, password):
@@ -104,16 +104,11 @@ if S == True:
 	st.dataframe(Dat2)
 	st.info("Contrairement à la première base de données, le client verra uniquement la date, avec le prix, la production et l'id.")
 
-			
-	
-
-	
-	
 	DATA_URL =('./DATA/TM15.csv')
 
 
 	n = st.slider('Nombre de jours pour les prédictions:',1,30) # n correspond au nombre de jours que l'utilisateur choisira pour les prédictions
-	st.info("Ici, vous pourrez choisir le nombre de jours (entre 1 et 30), que vous voulez pour la prédiction du prix et de la production.")
+	st.info("Ici, vous pourrez choisir le nombre de jours (entre 1 et 30), que vous voulez pour la prédiction du prix et de la production. Pour choisir le nombre de jours, cliquez sur le point rouge , et faites le glisser vers la droite.")
 	st.write('le nombre de jours choisis pour les prédictions, est:', n)
 	period = int(n)
 
@@ -186,7 +181,7 @@ if S == True:
 
 
 
-	Date = st.date_input('Choisir une date (ex: 2021-07-09): ')
+	Date = st.date_input('Choisir une date: ')
 	st.info("En cliquant sur l'encadré gris foncé, vous pouvez choisir et cliquer la date que vous souhaitez.")
 	st.write("La date choisie est:", Date)
 
