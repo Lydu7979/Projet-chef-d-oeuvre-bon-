@@ -20,6 +20,10 @@ import dns
 import logging
 from Base_données.DBMongo import get_client_mongodb
 from Base_données.DBsqlite import create_usertable, add_userdata, login_user, view_all_users
+import seaborn as sns
+from sklearn.preprocessing import MinMaxScaler
+import pickle
+from statsmodels.tsa.arima_model import ARIMAResults
 # from pages.dowload_data import download
 logging.basicConfig(filename='demo.log')
 logging.debug('This message should go to the log file')
@@ -74,7 +78,7 @@ if S == True:
 	#image = Image.open(file) 
 	st.image(file)
 	st.markdown("L'application qui vous aide à prédire le prix de tomates au kilo, et la production dans le futur.")
-
+	st.info("Dans un premier temps, vous verrez les bases avec les informations. Ensuite vous pourrez ensuite choisir le nombre de jours, le dataset et la date pour les prédicitions.")			
 	st.write("Base de données Mongodb")
 	client = get_client_mongodb()
 
@@ -100,9 +104,7 @@ if S == True:
 	st.dataframe(Dat2)
 	st.info("Contrairement à la première base de données, le client verra uniquement la date, avec le prix, la production et l'id.")
 
-
-
-
+			
 	dataset  = ('TM','TM2','TM3', 'TM4', 'TM5', 'TM6', 'TM7', 'TM8', 'TM9', 'TM10', 'TM11', 'TM12', 'TM13', 'TM14', 'TM15')
 
 	option = st.selectbox('Choisir le dataset pour les prédictions',dataset)
@@ -132,35 +134,54 @@ if S == True:
 
 	data['Date'] = pd.to_datetime(data['Date'],infer_datetime_format=True)
 	data.sort_values(by='Date', ascending=True, inplace = True) 
-	# data2 = data[['Date','']]
+	
 	data = data.set_index(['Date'])
 
 	Prix = data['prix moyen au kg']
 	Production =  data['Production quantité \ntonne(s)']
-	print("*"*20)
-	st.write("Représentation du prix (en haut) et de la production (en bas)")
-	st.line_chart(Prix)
-	st.info("Il s'agit de l'évolution du prix au kilo des tomates au cours du temps.")
-	print("*"*20)
-	print(type(data))
-	prix = pd.DataFrame({"prix":list(Prix)})
+				
+	scaler = MinMaxScaler()
+				
+	data[['prix_n', 'production_n']] = scaler.fit_transform(data[['prix moyen au kg', 'Production quantité \ntonne(s)']])
+	#st.dataframe(data)
+
+			
+
+	st.write("Représentation du prix  et de la production")
+	fig = plt.figure(figsize=(10,5))
+	plt.plot(data.prix_n, label="prix normalisé", color = 'darkviolet') # k b r y g m c C0 - C5
+	plt.plot(data.production_n, label="production normalisée", color = 'gold')
+	plt.title("Représentation du prix au kilo et de la production")
+	plt.xlabel("Année")
+	plt.legend(loc="upper right")
+	plt.grid(True)
+	st.pyplot(fig)
+			
+			
+	#st.line_chart(Prix)
+	st.info("Il s'agit de l'évolution du prix au kilo des tomates et de la production de tomates au cours du temps.")
+	st.info("Il a fallu normaliser le prix et la production car les unités n'étaient pas les mêmes. D'ou les valeurs comprises entre 0 et 1, sur le graphe.")
+	#print("*"*20)
+	#print(type(data))
+	#prix = pd.DataFrame({"prix":list(Prix)})
 	#prix.reindex(data['Date'])
-	print(type(data))
+	#print(type(data))
 	# st.dataframe(data)
-	print("lol")
+	#print("lol")
 	#st.bar_chart(Prix)
 
-	st.line_chart(Production)
-	st.info("Il s'agit de l'évolution du production de tomates en tonnes au cours du temps.")
+	#st.line_chart(Production)
+	#st.info("Il s'agit de l'évolution du production de tomates en tonnes au cours du temps.")
 	# st.dataframe(pd.DataFrame({"production":list(Production)}))
 
-#modèles
+		#modèles
+			
+			
+	mod = pickle.load(open('modèle_ARIMA_Prix2.pkl', 'rb'))
+			
 
-	mod = ARIMA(Prix,order=(1,0,3))
-	results = mod.fit()
-
-	mod2 = ARIMA(Production,order=(1,0,3))
-	results2 = mod2.fit()
+	mod2 = pickle.load(open('modèle_ARIMA_Production2.pkl', 'rb'))
+			
 
 
 
@@ -170,9 +191,10 @@ if S == True:
 
 
 
-	forecast,err,ci = results.forecast(steps= period, alpha = 0.05)
+	forecast,err,ci = mod.forecast(steps= period, alpha = 0.05)
+
 	df_forecast = pd.DataFrame({'Prix dans '+ str(n) +'jours' :forecast},index=pd.date_range(start=Date, periods=period, freq='D'))
-	
+			
 	#st.table(df_forecast)
 	n_prix = pd.DataFrame({"Date":pd.date_range(start=Date, periods=period, freq='D'), 'prix dans '+ str(n)+'jours' :list(forecast)})
 	st.dataframe(n_prix)
@@ -180,11 +202,11 @@ if S == True:
 	df_forecast.to_csv("Forecast.csv")
 	st.line_chart(df_forecast)
 	st.info("Vous verrez une représentation graphique des données présentes dans le tableau ci-dessus.")
-	
+			
 
-	forecast2,err,ci = results2.forecast(steps= period, alpha = 0.05)
+	forecast2,err,ci = mod2.forecast(steps= period, alpha = 0.05)
 	df_forecast2 = pd.DataFrame({'Production dans '+ str(n)+'jours' :forecast2},index=pd.date_range(start=Date, periods=period, freq='D'))
-	
+			
 	#st.table(df_forecast2)
 	n_pro = pd.DataFrame({"Date":pd.date_range(start=Date, periods=period, freq='D'),'production dans '+ str(n)+'jours' :list(forecast2)})
 	st.dataframe(n_pro)
@@ -207,34 +229,53 @@ if S == True:
 	forcast.index=forcast['Date']
 	del forcast['Date']
 	#st.line_chart(forcast)
-	
-
+			
 	forcast2.rename(columns={"Unnamed: 0": "Date",'Production dans '+ str(n)+'jours':"Production quantité \ntonne(s)"},inplace=True)
 	forcast2.head()
 	forcast2['Date'] = pd.to_datetime(forcast2['Date'],infer_datetime_format=True)
 	forcast2.index=forcast2['Date']
 	del forcast2['Date']
 	#st.line_chart(forcast2)
-	
+			
 
 	fig1 = pd.concat([Prix,forcast])
 	fig2 = pd.concat([Production,forcast2])
-	
-	
-	
-
+			
+	fig3 = plt.figure(figsize=(10,5))
 	st.write("Représentation du prix avec les données prédites")
-	st.line_chart(fig1)
-	st.info("Le tracé en bleu représente les données observées, provenant du dataset choisi. Le tracé en orange représente les données prédites par rapport au jour choisi.")
-	
-	# #st.markdown(csv_downloader(fig1), unsafe_allow_html=True)
+	plt.plot(Prix, label="prix (valeurs observées)", color = 'darkviolet')
+	plt.plot(forcast, label="prix (valeurs prédites)", color = 'coral')
+	plt.title("Représentation du prix avec les données prédites")
+	plt.xlabel("Année")
+	plt.legend(loc="upper right")
+	plt.grid(True)
+	st.pyplot(fig3)
+	st.info("Le tracé en violet représente les données observées, provenant du dataset choisi. Le tracé en orange représente les données prédites par rapport au jour choisi.")
 
-	st.write("Représentation de la production avec les données prédites")
-	st.line_chart(fig2)
-	st.info("Le tracé en bleu représente les données observées, provenant du dataset choisi. Le tracé en orange représente les données prédites par rapport au jour choisi.")
-	
+	fig4 = plt.figure(figsize=(10,5))
+	st.write("Représentation du prix avec les données prédites")
+	plt.plot(Production, label="production (valeurs observées)", color = 'gold')
+	plt.plot(forcast2, label="production (valeurs prédites)", color = 'coral')
+	plt.title("Représentation du prix avec les données prédites")
+	plt.xlabel("Année")
+	plt.legend(loc="upper right")
+	plt.grid(True)
+	st.pyplot(fig4)
+	st.info("Le tracé en jaune représente les données observées, provenant du dataset choisi. Le tracé en orange représente les données prédites par rapport au jour choisi.")
 
-	# #st.markdown(csv_downloader(fig2), unsafe_allow_html=True)
+		
+	#st.write("Représentation du prix avec les données prédites")
+	#st.line_chart(fig1)
+	#st.info("Le tracé en bleu représente les données observées, provenant du dataset choisi. Le tracé en orange représente les données prédites par rapport au jour choisi.")
+		
+		# #st.markdown(csv_downloader(fig1), unsafe_allow_html=True)
+
+		#st.write("Représentation de la production avec les données prédites")
+		#st.line_chart(fig2)
+		#st.info("Le tracé en bleu représente les données observées, provenant du dataset choisi. Le tracé en orange représente les données prédites par rapport au jour choisi.")
+		
+
+		# #st.markdown(csv_downloader(fig2), unsafe_allow_html=True)
 
 else:
 	st.subheader("Créer votre compte")
