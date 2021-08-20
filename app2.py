@@ -78,7 +78,7 @@ if S == True:
 	#image = Image.open(file) 
 	st.image(file)
 	st.markdown("L'application qui vous aide à prédire le prix de tomates au kilo, et la production dans le futur.")
-	st.info("Dans un premier temps, vous verrez les bases avec les informations. Ensuite vous pourrez ensuite choisir le nombre de jours, le dataset et la date pour les prédicitions.")			
+	st.info("Dans un premier temps, vous verrez les bases de données avec les informations. Ensuite vous pourrez ensuite choisir le nombre de jours, le dataset et la date pour les prédicitions.")			
 	st.write("Base de données Mongodb")
 	client = get_client_mongodb()
 
@@ -139,7 +139,8 @@ if S == True:
 
 	data.rename(columns={"Production quantité tonne(s)": "Production en tonnes"},inplace=True)
 	data = data.drop(columns=["Unnamed: 0"])
-	st.write(data.columns)
+	
+	#st.write(data.columns)
 	Prix = data['prix moyen au kg']
 	Production =  data['Production en tonnes']
 				
