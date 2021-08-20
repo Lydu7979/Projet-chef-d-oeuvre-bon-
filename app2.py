@@ -78,7 +78,7 @@ if S == True:
 	#image = Image.open(file) 
 	st.image(file)
 	st.markdown("L'application qui vous aide à prédire le prix de tomates au kilo, et la production dans le futur.")
-	st.info("Dans un premier temps, vous verrez les bases de données avec les informations. Ensuite vous pourrez ensuite choisir le nombre de jours, le dataset et la date pour les prédicitions.")			
+	st.info("Dans un premier temps, vous verrez les bases de données avec les informations. Ensuite vous pourrez ensuite choisir le nombre de jours, et la date pour les prédicitions.")			
 	st.write("Base de données Mongodb")
 	client = get_client_mongodb()
 
@@ -149,9 +149,6 @@ if S == True:
 	data[['prix_n', 'production_n']] = scaler.fit_transform(data[['prix moyen au kg', 'Production en tonnes']])
 	#st.dataframe(data)
 
-			
-
-	st.write("Représentation du prix  et de la production")
 	fig = plt.figure(figsize=(10,5))
 	plt.plot(data.prix_n, label="prix normalisé", color = 'darkviolet') # k b r y g m c C0 - C5
 	plt.plot(data.production_n, label="production normalisée", color = 'gold')
@@ -163,8 +160,8 @@ if S == True:
 			
 			
 	#st.line_chart(Prix)
-	st.info("Il s'agit de l'évolution du prix au kilo des tomates et de la production de tomates au cours du temps.")
-	st.info("Il a fallu normaliser le prix et la production car les unités n'étaient pas les mêmes. D'ou les valeurs comprises entre 0 et 1, sur le graphe.")
+	st.info("Il s'agit de l'évolution du prix au kilo des tomates et de la production de tomates au cours du temps. Il a fallu normaliser le prix et la production car les unités n'étaient pas les mêmes. D'ou les valeurs comprises entre 0 et 1, sur le graphe.")
+	
 	#print("*"*20)
 	#print(type(data))
 	#prix = pd.DataFrame({"prix":list(Prix)})
@@ -251,6 +248,7 @@ if S == True:
 	plt.plot(forcast, label="prix (valeurs prédites)", color = 'coral')
 	plt.title("Représentation du prix avec les données prédites")
 	plt.xlabel("Année")
+	plt.ylabel("Prix")
 	plt.legend(loc="upper right")
 	plt.grid(True)
 	st.pyplot(fig3)
@@ -262,6 +260,7 @@ if S == True:
 	plt.plot(forcast2, label="production (valeurs prédites)", color = 'coral')
 	plt.title("Représentation du prix avec les données prédites")
 	plt.xlabel("Année")
+	plt.ylabel("Production")
 	plt.legend(loc="upper right")
 	plt.grid(True)
 	st.pyplot(fig4)
