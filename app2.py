@@ -266,7 +266,7 @@ if S == True:
 
 		#modèles
 	st.subheader("Prédicition du prix et de la production")
-	st.info("Dans cette partie, vous verrez les prédictions du prix en premier et de la production ensuite.")		
+	st.info("Dans cette partie, vous verrez les prédictions du prix en premier et de la production ensuite. Que ça soit pour le prix ou la production, vous verrez dans un premier temps les prédictions sous forme d'un tableau suivi de la représentation graphique de ces dernières. Ensuite, vous verrez une représentation des données (observées et prédites). ")		
 			
 	mod = pickle.load(open('modèle_ARIMA_Prix2.pkl', 'rb'))
 			
