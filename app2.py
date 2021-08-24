@@ -39,7 +39,7 @@ def csv_downloader(data):
 	return href
 
 #Partie connexion
-st.sidebar.subheader("Création compte")
+st.sidebar.subheader("Connectez-vous")
 username = st.sidebar.text_input("Nom d'utilisateur")
 password = st.sidebar.text_input("Mot de passe", type = 'password')
 st.sidebar.info("Une fois connecté(e). vous aurez accès à l'application.")
