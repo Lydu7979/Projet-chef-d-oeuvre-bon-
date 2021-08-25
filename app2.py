@@ -79,6 +79,7 @@ if S == True:
 	#image = Image.open(file) 
 	st.image(file)
 	st.markdown("L'application qui vous aide à prédire le prix de tomates au kilo, et la production dans le futur.")
+	logging.info("Bienvenue dans l'application.")
 	st.info("Dans un premier temps, vous verrez la base de données (sous forme de tableau) avec les informations. Ensuite, vous pourrez ensuite choisir le nombre de jours, pour les prédicitions.")			
 	st.subheader("Base de données Mongodb")
 	
@@ -95,6 +96,8 @@ if S == True:
 
 	Dat2 = pd.DataFrame(list(mycl2.find()))
 	Dat2 = Dat2.drop_duplicates(subset= ['index'])
+
+	logging.info("Voici la base de données contenant l'ensemble des données.")
 
 	st.dataframe(Dat)
 	
@@ -132,6 +135,7 @@ if S == True:
 	period = int(n)
 	
 	st.subheader("Représentation graphique des données (prix et production réunis)")
+	logging.info('Voici des représentations graphiques des données historiques (les valeurs observées présente dans le dataset créé à partir de la base de données.')
 
 	@st.cache(allow_output_mutation=True)
 	def load_data():
