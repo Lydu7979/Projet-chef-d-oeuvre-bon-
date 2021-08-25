@@ -95,7 +95,6 @@ if S == True:
 
 	Dat2 = pd.DataFrame(list(mycl2.find()))
 	Dat2 = Dat2.drop_duplicates(subset= ['index'])
-	
 
 	st.dataframe(Dat)
 	
