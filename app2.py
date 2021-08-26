@@ -20,6 +20,7 @@ import dns
 import logging
 from Base_données.DBMongo import get_client_mongodb
 from Base_données.DBsqlite import create_usertable, add_userdata, login_user, view_all_users
+from Base_données.DB2sqlite import bdd_sql
 import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler
 import pickle
@@ -90,6 +91,7 @@ if S == True:
 
 	Dat = pd.DataFrame(list(mycl.find()))
 	Dat = Dat.drop_duplicates(subset= ['index'])
+	Dat = Dat.drop(columns=["index"])
 	
 	db2 = client.Tomates_prix_production_Centre
 	mycl2 = db2["donnees"]
@@ -100,6 +102,10 @@ if S == True:
 	logging.info("Voici la base de données contenant l'ensemble des données.")
 
 	st.dataframe(Dat)
+
+	#st.subheader("Base de données Sql")
+
+	#st.write(bdd_sql())
 	
 
 	
