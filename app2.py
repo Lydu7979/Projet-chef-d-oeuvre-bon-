@@ -15,7 +15,7 @@ from statsmodels.tsa.seasonal import seasonal_decompose
 from datetime import date
 import base64 
 import time
-timestr = time.strftime("%Y%m%d-%H%M%S")
+timestr = time.strftime("%Y%m%d")
 import dns
 import logging
 from Base_données.DBMongo import get_client_mongodb
