@@ -44,6 +44,7 @@ st.sidebar.subheader("Connectez-vous")
 username = st.sidebar.text_input("Nom d'utilisateur")
 password = st.sidebar.text_input("Mot de passe", type = 'password')
 st.sidebar.info("Une fois connecté(e). vous aurez accès à l'application.")
+logging.warning("Avant de vous connecter, assurez-vous d'avoir créé votre compte d'utilisateur.")
 #Condition pour accéder l'application
 @st.cache
 def is_well_logged(username, password):
@@ -80,8 +81,7 @@ if S == True:
 	#image = Image.open(file) 
 	st.image(file)
 	st.markdown("L'application qui vous aide à prédire le prix de tomates au kilo, et la production dans le futur.")
-	logging.info("Bienvenue dans l'application.")
-	st.info("Dans un premier temps, vous verrez la base de données (sous forme de tableau) avec les informations. Ensuite, vous pourrez ensuite choisir le nombre de jours, pour les prédicitions.")			
+	logging.info("Bienvenue dans l'application.")			
 	st.subheader("Base de données Mongodb")
 	
 	client = get_client_mongodb()
@@ -101,7 +101,8 @@ if S == True:
 
 	logging.info("Voici la base de données contenant l'ensemble des données.")
 
-	st.dataframe(Dat)
+	if st.button("Afficher la base de données"):
+		st.dataframe(Dat)
 
 	#st.subheader("Base de données Sql")
 
@@ -135,12 +136,12 @@ if S == True:
 	DATA_URL =('./DATA/TM18.csv')
 	
 	st.subheader("Choix du nombre de jours pour les prédictions du prix et de la production")
-	n = st.slider('Nombre de jours pour les prédictions:',1,30) # n correspond au nombre de jours que l'utilisateur choisira pour les prédictions
-	st.info("Ici, vous pourrez choisir le nombre de jours (entre 1 et 30), que vous voulez pour la prédiction du prix et de la production. Pour choisir le nombre de jours, cliquez sur le point rouge , et faites le glisser vers la droite.")
+	n = st.slider('Choisir le nombre de jours pour les prédictions:',1,30) # n correspond au nombre de jours que l'utilisateur choisira pour les prédictions
+	logging.info("Ici, vous pourrez choisir le nombre de jours (entre 1 et 30), que vous voulez pour la prédiction du prix et de la production. Pour choisir le nombre de jours, cliquez sur le point rouge , et faites le glisser vers la droite.")
 	st.write('le nombre de jours choisis pour les prédictions, est:', n)
 	period = int(n)
 	
-	st.subheader("Représentation graphique des données (prix et production réunis)")
+	st.subheader("Représentation graphique des données")
 	logging.info('Voici des représentations graphiques des données historiques (les valeurs observées présente dans le dataset créé à partir de la base de données.')
 
 	@st.cache(allow_output_mutation=True)
@@ -173,108 +174,94 @@ if S == True:
 	data[['prix_n', 'production_n']] = scaler.fit_transform(data[['prix moyen au kg', 'Production en tonnes']])
 	#st.dataframe(data)
 
-	fig = plt.figure(figsize=(10,5))
-	plt.plot(data.prix_n, label="prix normalisé", color = 'darkviolet') # k b r y g m c C0 - C5
-	plt.plot(data.production_n, label="production normalisée", color = 'gold')
-	
-	plt.title("Représentation du prix au kilo et de la production")
-	plt.legend(loc="upper right")
-	plt.grid(True)
-	st.pyplot(fig)
+	action = st.radio('Choix de la représentation graphique',['Représentation graphique des données (prix et production réunis)','Représentation graphique des données séparées'])
+	if action == 'Représentation graphique des données (prix et production réunis)':
+		fig = plt.figure(figsize=(10,5))
+		plt.plot(data.prix_n, label="prix normalisé", color = 'darkviolet')
+		plt.plot(data.production_n, label="production normalisée", color = 'gold')
+		plt.title("Représentation du prix au kilo et de la production")
+		plt.legend(loc="upper right")
+		plt.grid(True)
+		st.pyplot(fig)
+		st.write("Il s'agit de l'évolution du prix au kilo des tomates, et de la production de tomates, au cours du temps. Il a fallu normaliser le prix et la production car les unités n'étaient pas les mêmes. D'ou les valeurs comprises entre 0 et 1, sur le graphe.")
 			
-	#st.line_chart(Prix)
-	st.info("Il s'agit de l'évolution du prix au kilo des tomates, et de la production de tomates, au cours du temps. Il a fallu normaliser le prix et la production car les unités n'étaient pas les mêmes. D'ou les valeurs comprises entre 0 et 1, sur le graphe.")
-	st.subheader("Représentation des données séparées")
-	st.info("Vous pourrez voir l'évolution au cours du temps de chacune des données. Parmi les données, on retrouve le prix, la production, les données météos(température(minimale et maximale) en °C, précipitations en mm, durée de l'ensoleillement en min, vitesse du vent en km/h).")
-	tache = st.selectbox("Choisir les données à visualiser:",["prix au kilo","production","Température minimale en °C","Température maximale en °C","précipitations en mm","Durée de l'ensoleillement en min","Vitesse du vent en km/h"])
 
-	if tache == "prix au kilo":
-		fig5 = plt.figure(figsize=(10,5))
-		plt.plot(Prix, label="prix au kilo", color = 'darkviolet') 
-		plt.title("Représentation du prix au kilo au cours du temps")
-		plt.xlabel("Année")
-		plt.ylabel("Prix")
-		plt.legend(loc="upper right")
-		plt.grid(True)
-		st.pyplot(fig5)
-			
-	if tache == "production":
-		fig6 = plt.figure(figsize=(10,5))
-		plt.plot(Production, label="production", color = 'gold') 
-		plt.title("Représentation de la production au cours du temps")
-		plt.xlabel("Année")
-		plt.ylabel("Production")
-		plt.legend(loc="upper right")
-		plt.grid(True)
-		st.pyplot(fig6)
-			
-	if tache == "Température minimale en °C":
-		fig7 = plt.figure(figsize=(10,5))
-		plt.plot(data["Température minimale en °C"], label="Température minimale en °C", color = 'cyan') 
-		plt.title("Représentation de la température minimale au cours du temps")
-		plt.xlabel("Année")
-		plt.ylabel("Température minimale en °C")
-		plt.legend(loc="upper right")
-		plt.grid(True)
-		st.pyplot(fig7)
-	
-	if tache == "Température maximale en °C":
-		fig8 = plt.figure(figsize=(10,5))
-		plt.plot(data["Température maximale en °C"], label="Température maximale en °C", color = 'magenta') 
-		plt.title("Représentation de la température maximale au cours du temps")
-		plt.xlabel("Année")
-		plt.ylabel("Production")
-		plt.legend(loc="upper right")
-		plt.grid(True)
-		st.pyplot(fig8)
-	
-	if tache == "précipitations en mm":
-		fig9 = plt.figure(figsize=(10,5))
-		plt.plot(data["précipitations en mm"], label="précipitations en mm", color = 'blue') 
-		plt.title("Représentation des précipitations au cours du temps")
-		plt.xlabel("Année")
-		plt.ylabel("Précipitations en mm")
-		plt.legend(loc="upper right")
-		plt.grid(True)
-		st.pyplot(fig9)
-	
-	if tache == "Durée de l'ensoleillement en min":
-		fig10 = plt.figure(figsize=(10,5))
-		plt.plot(data["Ensoleillement en min"], label="Ensoleillement en min", color = 'red') 
-		plt.title("Représentation de la durée de l'ensoleillement au cours du temps")
-		plt.xlabel("Année")
-		plt.ylabel("Durée de l'ensoleillement en min")
-		plt.legend(loc="upper right")
-		plt.grid(True)
-		st.pyplot(fig10)
-	
-	if tache == "Vitesse du vent en km/h":
-		fig11 = plt.figure(figsize=(10,5))
-		plt.plot(data["Rafales (vitesse du vent) en km/h"], label="vitesse du vent en km/h", color = 'green') 
-		plt.title("Représentation de la vitesse du vent en km/h au cours du temps")
-		plt.xlabel("Année")
-		plt.ylabel("Vitesse du vent en km/h")
-		plt.legend(loc="upper right")
-		plt.grid(True)
-		st.pyplot(fig11)					
-
-
-	#print("*"*20)
-	#print(type(data))
-	#prix = pd.DataFrame({"prix":list(Prix)})
-	#prix.reindex(data['Date'])
-	#print(type(data))
-	# st.dataframe(data)
-	#print("lol")
-	#st.bar_chart(Prix)
-
-	#st.line_chart(Production)
-	#st.info("Il s'agit de l'évolution du production de tomates en tonnes au cours du temps.")
-	# st.dataframe(pd.DataFrame({"production":list(Production)}))
+	if action == "Représentation graphique des données séparées":
+		st.info("Vous pourrez voir l'évolution au cours du temps de chacune des données. Parmi les données, on retrouve le prix, la production, les données météos(température(minimale et maximale) en °C, précipitations en mm, durée de l'ensoleillement en min, vitesse du vent en km/h).")
+		tache = st.radio("Choisir les données à visualiser:",["prix au kilo","production","Température minimale en °C","Température maximale en °C","précipitations en mm","Durée de l'ensoleillement en min","Vitesse du vent en km/h"])
+		
+		if tache == "prix au kilo":
+			fig5 = plt.figure(figsize=(10,5))
+			plt.plot(Prix, label="prix au kilo", color = 'darkviolet') 
+			plt.title("Représentation du prix au kilo au cours du temps")
+			plt.xlabel("Année")
+			plt.ylabel("Prix")
+			plt.legend(loc="upper right")
+			plt.grid(True)
+			st.pyplot(fig5)
+		
+		if tache == "production":
+			fig6 = plt.figure(figsize=(10,5))
+			plt.plot(Production, label="production", color = 'gold') 
+			plt.title("Représentation de la production au cours du temps")
+			plt.xlabel("Année")
+			plt.ylabel("Production")
+			plt.legend(loc="upper right")
+			plt.grid(True)
+			st.pyplot(fig6)
+		
+		if tache == "Température minimale en °C":
+			fig7 = plt.figure(figsize=(10,5))
+			plt.plot(data["Température minimale en °C"], label="Température minimale en °C", color = 'cyan') 
+			plt.title("Représentation de la température minimale au cours du temps")
+			plt.xlabel("Année")
+			plt.ylabel("Température minimale en °C")
+			plt.legend(loc="upper right")
+			plt.grid(True)
+			st.pyplot(fig7)
+		
+		if tache == "Température maximale en °C":
+			fig8 = plt.figure(figsize=(10,5))
+			plt.plot(data["Température maximale en °C"], label="Température maximale en °C", color = 'magenta') 
+			plt.title("Représentation de la température maximale au cours du temps")
+			plt.xlabel("Année")
+			plt.ylabel("Production")
+			plt.legend(loc="upper right")
+			plt.grid(True)
+			st.pyplot(fig8)
+		
+		if tache == "précipitations en mm":
+			fig9 = plt.figure(figsize=(10,5))
+			plt.plot(data["précipitations en mm"], label="précipitations en mm", color = 'blue') 
+			plt.title("Représentation des précipitations au cours du temps")
+			plt.xlabel("Année")
+			plt.ylabel("Précipitations en mm")
+			plt.legend(loc="upper right")
+			plt.grid(True)
+			st.pyplot(fig9)
+		
+		if tache == "Durée de l'ensoleillement en min":
+			fig10 = plt.figure(figsize=(10,5))
+			plt.plot(data["Ensoleillement en min"], label="Ensoleillement en min", color = 'red') 
+			plt.title("Représentation de la durée de l'ensoleillement au cours du temps")
+			plt.xlabel("Année")
+			plt.ylabel("Durée de l'ensoleillement en min")
+			plt.legend(loc="upper right")
+			plt.grid(True)
+			st.pyplot(fig10)
+		
+		if tache == "Vitesse du vent en km/h":
+			fig11 = plt.figure(figsize=(10,5))
+			plt.plot(data["Rafales (vitesse du vent) en km/h"], label="vitesse du vent en km/h", color = 'green') 
+			plt.title("Représentation de la vitesse du vent en km/h au cours du temps")
+			plt.xlabel("Année")
+			plt.ylabel("Vitesse du vent en km/h")
+			plt.legend(loc="upper right")
+			plt.grid(True)
+			st.pyplot(fig11)					
 
 		#modèles
-	st.subheader("Prédicition du prix et de la production")
-	st.info("Dans cette partie, vous verrez les prédictions du prix en premier et de la production ensuite. Que ça soit pour le prix ou la production, vous verrez dans un premier temps les prédictions sous forme d'un tableau suivi de la représentation graphique de ces dernières. Ensuite, vous verrez une représentation des données (observées et prédites). ")		
+	st.subheader("Prédictions du prix et de la production")		
 			
 	mod = pickle.load(open('modèle_ARIMA_Prix2.pkl', 'rb'))
 			
@@ -282,51 +269,20 @@ if S == True:
 	mod2 = pickle.load(open('modèle_ARIMA_Production2.pkl', 'rb'))
 
 	forecast,err,ci = mod.forecast(steps= period, alpha = 0.05)
-
-	df_forecast = pd.DataFrame({'Prix dans '+  str(n) +" "+'jours' :forecast},index=pd.date_range(start=datetime.date.today(), periods=period, freq='D'))
-			
-	#st.table(df_forecast)
-	st.subheader("Prédiction du prix")
 	n_prix = pd.DataFrame({"Date":pd.date_range(start=datetime.date.today(), periods=period, freq='D'), 'prix dans '+ str(n) +" "+'jours' :list(forecast)})
-	st.dataframe(n_prix)
-	st.info("Voici un tableau avec les dates (en commençant par celle d'aujourd'hui), et des prédicitons du prix par rapport aux dates, et au nombre de jours choisis. Ci-dessous, voici la représentation graphique de ces données.")
+	df_forecast = pd.DataFrame({'Prix dans '+  str(n) +" "+'jours' :forecast},index=pd.date_range(start=datetime.date.today(), periods=period, freq='D'))
 	df_forecast.to_csv("Forecast.csv")
-	st.line_chart(df_forecast)
-	
-	forcast=pd.read_csv('Forecast.csv')
-	
+	forcast=pd.read_csv('Forecast.csv')	
 	forcast.rename(columns={"Unnamed: 0": "Date",'Prix dans '+ str(n) +'jours':"prix moyen au kg"},inplace=True)
 	forcast['Date'] = pd.to_datetime(forcast['Date'],infer_datetime_format=True)
 	forcast.index=forcast['Date']
 	del forcast['Date']
 	fig1 = pd.concat([Prix,forcast])
-	fig3 = plt.figure(figsize=(10,5))
-	
-	plt.plot(Prix, label="prix (valeurs observées)", color = 'darkviolet')
-	plt.plot(forcast, label="prix (valeurs prédites)", color = 'coral')
-	plt.title("Représentation du prix avec les données prédites")
-	plt.xlabel("Année")
-	plt.ylabel("Prix")
-	plt.legend(loc="upper right")
-	plt.grid(True)
-	st.pyplot(fig3)
-	st.info("Le tracé en violet représente les données observées, provenant du dataset créé à partir de la base de donnée. Le tracé en orange représente les données prédites par rapport au jour choisi.")
-
-
-
-
-			
 
 	forecast2,err,ci = mod2.forecast(steps= period, alpha = 0.05)
 	df_forecast2 = pd.DataFrame({'Production dans '+ str(n) +" "+'jours' :forecast2},index=pd.date_range(start=datetime.date.today(),periods=period, freq='D'))
-			
-	#st.table(df_forecast2)
-	st.subheader("Prédiction de la production")
 	n_pro = pd.DataFrame({"Date":pd.date_range(start=datetime.date.today(), periods=period, freq='D'),'production dans '+ str(n) +" "+'jours' :list(forecast2)})
-	st.dataframe(n_pro)
-	st.info("Voici un tableau avec les dates (en commençant par celle d'aujourd'hui), et des prédicitons de la production par rapport aux dates, et au nombre de jours choisis. Ci-dessous, voici la représentation graphique de ces données.")
 	df_forecast2.to_csv("Forecast2.csv")
-	st.line_chart(df_forecast2)
 	forcast2=pd.read_csv('Forecast2.csv')
 	forcast2.rename(columns={"Unnamed: 0": "Date",'Production dans '+ str(n) +'jours':"Production en tonnes"},inplace=True)
 	forcast2.head()
@@ -334,65 +290,66 @@ if S == True:
 	forcast2.index=forcast2['Date']
 	del forcast2['Date']
 	fig2 = pd.concat([Production,forcast2])
-	fig4 = plt.figure(figsize=(10,5))
-	
-	plt.plot(Production, label="production (valeurs observées)", color = 'gold')
-	plt.plot(forcast2, label="production (valeurs prédites)", color = 'coral')
-	plt.title("Représentation du prix avec les données prédites")
-	plt.xlabel("Année")
-	plt.ylabel("Production")
-	plt.legend(loc="upper right")
-	plt.grid(True)
-	st.pyplot(fig4)
-	st.info("Le tracé en jaune représente les données observées, provenant du dataset créé à partir de la base de donnée. Le tracé en orange représente les données prédites par rapport au jour choisi.")
 
+	Prédiction = st.radio('Choix entre les prédictions du prix et celles de la production',['Prédiction du prix','Prédiction de la production'])
 
-
-
-	
-
-
-
-	
-
-
-
-	#if st.checkbox('Show forecast data'):
-	#	st.subheader('forecast data')
-	#	st.dataframe(pd.DataFrame({'prix dans '+ str(n)+'jours' :list(forecast)}))
-	#	st.dataframe(pd.DataFrame({'production dans '+ str(n)+'jours' :list(forecast2)}))
-
-	
-			
-	
-
+	#st.table(df_forecast)
+	if Prédiction == "Prédiction du prix":		
+		choix = st.radio("Choix de la visualisation", ['tableau(valeurs prédites)', 'graphe(valeurs prédites)','graphe(données observées et données prédites)' ])
+		if choix == 'tableau(valeurs prédites)':
+			st.dataframe(n_prix)
 			
 
+		if choix == 'graphe(valeurs prédites)':
+			fig12 = plt.figure(figsize=(10,5))
+			plt.plot(forcast, label='prix dans '+ str(n) +" "+'jours', color = 'darkviolet')
+			plt.title("Représentation du prix pour les données prédites")
+			plt.xlabel("Jour")
+			plt.ylabel("Prix")
+			plt.legend(loc="upper right")
+			plt.grid(True)
+			st.pyplot(fig12)
 
 
-	#Date = st.date_input('Choisir une date: ')
-	#st.info("En cliquant sur l'encadré gris foncé, vous pouvez choisir et cliquer la date que vous souhaitez.")
-	#st.write("La date choisie est:", Date)
-    
-	
-	
-	
+		if choix == 'graphe(données observées et données prédites)':
+			fig3 = plt.figure(figsize=(10,5))
+			plt.plot(Prix, label="prix (valeurs observées)", color = 'darkviolet')
+			plt.plot(forcast, label='prix dans '+ str(n) +" "+'jours', color = 'coral')
+			plt.title("Représentation du prix avec les données prédites")
+			plt.xlabel("Année")
+			plt.ylabel("Prix")
+			plt.legend(loc="upper right")
+			plt.grid(True)
+			st.pyplot(fig3)
+			
+			
+	if Prédiction == 'Prédiction de la production':
+		choix = st.radio("Choix de la visualisation", ['tableau(valeurs prédites)', 'graphe(valeurs prédites)','graphe(données observées et données prédites)' ])
+		if choix == 'tableau(valeurs prédites)':
+			st.dataframe(n_pro)
 
+		if choix == 'graphe(valeurs prédites)':
+			fig13 = plt.figure(figsize=(10,5))
+			plt.plot(forcast2, label='production dans '+ str(n) +" "+'jours', color = 'gold')
+			plt.title("Représentation de la production pour les données prédites")
+			plt.xlabel("Jour")
+			plt.ylabel("Production")
+			plt.legend(loc="upper right")
+			plt.grid(True)
+			st.pyplot(fig13)
 
+		if choix == 'graphe(données observées et données prédites)':
+			fig4 = plt.figure(figsize=(10,5))
+			plt.plot(Production, label="production (valeurs observées)", color = 'gold')
+			plt.plot(forcast2, label='production dans '+ str(n) +" "+'jours', color = 'coral')
+			plt.title("Représentation du prix avec les données prédites")
+			plt.xlabel("Année")
+			plt.ylabel("Production")
+			plt.legend(loc="upper right")
+			plt.grid(True)
+			st.pyplot(fig4)
+			
 
-
-	
-		
-	#st.write("Représentation du prix avec les données prédites")
-	#st.line_chart(fig1)
-	#st.info("Le tracé en bleu représente les données observées, provenant du dataset choisi. Le tracé en orange représente les données prédites par rapport au jour choisi.")
-		
-		# #st.markdown(csv_downloader(fig1), unsafe_allow_html=True)
-
-		#st.write("Représentation de la production avec les données prédites")
-		#st.line_chart(fig2)
-		#st.info("Le tracé en bleu représente les données observées, provenant du dataset choisi. Le tracé en orange représente les données prédites par rapport au jour choisi.")
-		
 
 		# #st.markdown(csv_downloader(fig2), unsafe_allow_html=True)
 
