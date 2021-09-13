@@ -26,9 +26,9 @@ from sklearn.preprocessing import MinMaxScaler
 import pickle
 from statsmodels.tsa.arima_model import ARIMAResults
 import datetime
-from Tomates_Bretagne.Fruits import j, data_loadTB, data_vizTB, Pred_prixTB, Pred_proTB
-from Melon_Poitou.Fruits import j, data_loadMP, data_vizMP, Pred_prixMP, Pred_proMB
-from Tomates_Centre.Fruits import j, data_load, Mo, data_vizTC, Pred_prixTC, Pred_proTC
+from Fruits.Tomates_Bretagne import j, data_loadTB, data_vizTB, Pred_prixTB, Pred_proTB
+from Fruits.Melon_Poitou import j, data_loadMP, data_vizMP, Pred_prixMP, Pred_proMB
+from Fruits.Tomates_Centre import j, data_load, Mo, data_vizTC, Pred_prixTC, Pred_proTC
 
 
 #Partie connexion
@@ -90,15 +90,15 @@ if S == True:
 
     if L_F == "Melon":
         st.subheader('Data Visualisation')
-            data_vizMP()
+        data_vizMP()
 
-            st.subheader('Prédiction')
-            prédiction = "Choix de la prédicition entre le prix et la production:",['Prix','Production']
-            if prédiction == "Prix":
-                Pred_prixMP()
+        st.subheader('Prédiction')
+        prédiction = "Choix de la prédicition entre le prix et la production:",['Prix','Production']
+        if prédiction == "Prix":
+            Pred_prixMP()
 
-            if prédiction == "Production":
-                Pred_proMP()
+        if prédiction == "Production":
+            Pred_proMP()
 
 else:
 	st.subheader("Créer votre compte")

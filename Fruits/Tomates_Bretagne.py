@@ -88,8 +88,7 @@ def Pred_prixTB():
     choix = st.radio("Choix de la visualisation", ['tableau(valeurs prédites)', 'graphe(valeurs prédites)','graphe(données observées et données prédites)' ])
     if choix == 'tableau(valeurs prédites)':
         st.dataframe(n_prix)
-		
-	if choix == 'graphe(valeurs prédites)':
+    if choix == 'graphe(valeurs prédites)':
          fig12 = plt.figure(figsize=(10,5))
          plt.plot(forcast, label='prix dans '+ str(n) +" "+'jours', color = 'darkviolet')
          plt.title("Représentation du prix pour les données prédites")
@@ -98,9 +97,7 @@ def Pred_prixTB():
          plt.legend(loc="upper right")
          plt.grid(True)
          st.pyplot(fig12)
-
-
-	if choix == 'graphe(données observées et données prédites)':
+    if choix == 'graphe(données observées et données prédites)':
          fig3 = plt.figure(figsize=(10,5))
          plt.plot(Prix, label="prix (valeurs observées)", color = 'darkviolet')
          plt.plot(forcast, label='prix dans '+ str(n) +" "+'jours', color = 'coral')
@@ -137,9 +134,8 @@ def Pred_proTB():
     fig2 = pd.concat([Production,forcast2])
     choix = st.radio("Choix de la visualisation", ['tableau(valeurs prédites)', 'graphe(valeurs prédites)','graphe(données observées et données prédites)' ])
     if choix == 'tableau(valeurs prédites)':
-        st.dataframe(n_pro)
-		
-	if choix == 'graphe(valeurs prédites)':
+        st.dataframe(n_pro)	
+    if choix == 'graphe(valeurs prédites)':
          fig12 = plt.figure(figsize=(10,5))
          plt.plot(forcast2, label='production dans '+ str(n) +" "+'jours', color = 'gold')
          plt.title("Représentation de la production pour les données prédites")
@@ -148,8 +144,6 @@ def Pred_proTB():
          plt.legend(loc="upper right")
          plt.grid(True)
          st.pyplot(fig12)
-
-
 	if choix == 'graphe(données observées et données prédites)':
          fig3 = plt.figure(figsize=(10,5))
          plt.plot(Production, label="production (valeurs observées)", color = 'gold')
