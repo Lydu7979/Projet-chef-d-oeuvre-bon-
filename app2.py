@@ -76,7 +76,7 @@ if S == True:
 	# 	# tele1 = download(data.to_csv()).tele()
 	# 	#st.write(st.__version__)
 	# 	st.markdown(csv_downloader(data), unsafe_allow_html=True)
-	st.title('App Prix Production de tomates')
+	st.title('Application pour prédire le prix et la production de tomates')
 	file = 'Tomate.png'
 	#image = Image.open(file) 
 	st.image(file)
