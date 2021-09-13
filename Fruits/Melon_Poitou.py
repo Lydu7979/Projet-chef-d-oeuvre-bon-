@@ -35,7 +35,7 @@ def j():
     return n
 
 
-
+@st.cache(allow_output_mutation=True)
 def data_loadMP():
     excel_names = ["./DATA_Fruits/Melon Poitou - 2019.xlsx", "./DATA_Fruits/Melon Poitou - 2020.xlsx", "./DATA_Fruits/Melon Poitou - 2021.xlsx"]
     excels = [pd.ExcelFile(name) for name in excel_names]
@@ -71,6 +71,9 @@ def Pred_prixMP():
     n = j()
     period = int(n)
     data = data_loadMP()
+    data['Date liv.'] = pd.to_datetime(data['Date liv.'],infer_datetime_format=True)
+    data.sort_values(by='Date liv.', ascending=True, inplace = True) 
+    data = data.set_index(['Date liv.'])
     Prix = data['P.R EUR']
     forecast,err,ci = mod.forecast(steps= period, alpha = 0.05)
     n_prix = pd.DataFrame({"Date":pd.date_range(start=datetime.date.today(), periods=period, freq='D'), 'prix dans '+ str(n) +" "+'jours' :list(forecast)})
@@ -115,6 +118,9 @@ def Pred_proMP():
     n = j()
     period = int(n)
     data = data_loadMP()
+    data['Date liv.'] = pd.to_datetime(data['Date liv.'],infer_datetime_format=True)
+    data.sort_values(by='Date liv.', ascending=True, inplace = True) 
+    data = data.set_index(['Date liv.'])
     Production =  data['Quantité U.P']
     forecast2,err,ci = mod2.forecast(steps= period, alpha = 0.05)
     df_forecast2 = pd.DataFrame({'Production dans '+ str(n) +" "+'jours' :forecast2},index=pd.date_range(start=datetime.date.today(),periods=period, freq='D'))
