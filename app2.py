@@ -98,7 +98,6 @@ if S == True:
 	mycl = db["données"]
 
 	Dat = pd.DataFrame(list(mycl.find()))
-	
 	Dat = Dat.drop(columns=["index"])
 	
 	#db2 = client.Tomates_prix_production_Centre
