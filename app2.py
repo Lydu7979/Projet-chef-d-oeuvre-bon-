@@ -1,3 +1,4 @@
+from Sécurité.Sécurité import modi
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -22,6 +23,7 @@ from Base_données.DBMongo import get_client_mongodb
 from Base_données.DBsqlite import create_usertable, add_userdata, login_user, view_all_users
 from Base_données.DB2sqlite import bdd_sql
 import seaborn as sns
+from Sécurité.Safe import modi, verif
 from sklearn.preprocessing import MinMaxScaler
 import pickle
 from statsmodels.tsa.arima_model import ARIMAResults
@@ -43,16 +45,22 @@ def csv_downloader(data):
 st.sidebar.subheader("Connectez-vous")
 username = st.sidebar.text_input("Nom d'utilisateur")
 password = st.sidebar.text_input("Mot de passe", type = 'password')
+ha_pswd = modi(password)
 st.sidebar.info("Une fois connecté(e). vous aurez accès à l'application.")
 logging.warning("Avant de vous connecter, assurez-vous d'avoir créé votre compte d'utilisateur.")
 #Condition pour accéder l'application
 @st.cache
 def is_well_logged(username, password):
-	data = login_user(username,password)
+	data = login_user(username,verif(password,ha_pswd))
+	if data:
+		st.success("Connecté(e) tant que {}".format(username))
+	else:
+		st.warning("Nom d'utilisateur/mot de passe incorrect") 
 	if data == []:
 		return False
 	else:
 		return True
+
 
 
 
@@ -360,7 +368,7 @@ else:
 	st.info("Une fois votre nom d'utilisateur et votre mot de passe créés, cliquez sur Nouveau compte.")
 	if st.button("Nouveau compte"):
 		create_usertable()
-		add_userdata(n_user,n_pass)
-
+		add_userdata(n_user,modi(n_pass))
 		st.success("Vous avez créé votre compte.")
-		st.info("Connectez-vous, sur la barre de gauche.")
+		st.info("Connectez-vous dans la partie de gauche.")
+	
