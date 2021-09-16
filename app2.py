@@ -1,4 +1,4 @@
-from Sécurité.Sécurité import modi
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -49,7 +49,7 @@ ha_pswd = modi(password)
 st.sidebar.info("Une fois connecté(e). vous aurez accès à l'application.")
 logging.warning("Avant de vous connecter, assurez-vous d'avoir créé votre compte d'utilisateur.")
 #Condition pour accéder l'application
-@st.cache
+@st.cache(suppress_st_warning=True)
 def is_well_logged(username, password):
 	data = login_user(username,verif(password,ha_pswd))
 	if data:
