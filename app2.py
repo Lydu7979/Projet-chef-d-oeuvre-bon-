@@ -94,18 +94,17 @@ if S == True:
 	
 	client = get_client_mongodb()
 
-	db = client.Tomates_meteo_Centre5
-	mycl = db["donnees"]
+	db = client.Tomates_meteo_Centre6
+	mycl = db["données"]
 
 	Dat = pd.DataFrame(list(mycl.find()))
-	Dat = Dat.drop_duplicates(subset= ['index'])
+	
 	Dat = Dat.drop(columns=["index"])
 	
-	db2 = client.Tomates_prix_production_Centre
-	mycl2 = db2["donnees"]
-
-	Dat2 = pd.DataFrame(list(mycl2.find()))
-	Dat2 = Dat2.drop_duplicates(subset= ['index'])
+	#db2 = client.Tomates_prix_production_Centre
+	#mycl2 = db2["donnees"]
+	#Dat2 = pd.DataFrame(list(mycl2.find()))
+	#Dat2 = Dat2.drop_duplicates(subset= ['index'])
 
 	logging.info("Voici la base de données contenant l'ensemble des données.")
 
