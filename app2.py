@@ -50,7 +50,7 @@ st.sidebar.info("Une fois connecté(e). vous aurez accès à l'application.")
 logging.warning("Avant de vous connecter, assurez-vous d'avoir créé votre compte d'utilisateur.")
 #Condition pour accéder l'application
 @st.cache(suppress_st_warning=True)
-def is_well_logged(username, password):
+def is_well_logged(username, ha_pswd):
 	data = login_user(username,verif(password,ha_pswd))
 	if data:
 		st.success("Connecté(e) tant que {}".format(username))
@@ -66,7 +66,7 @@ def is_well_logged(username, password):
 
 
 #Condition pour accéder l'application
-S = is_well_logged(username, password)
+S = is_well_logged(username, ha_pswd)
 if S == True:
 
 	# uploaded_file = st.file_uploader("Télécharger un fichier sous le format csv ou excel.", type = ['csv', 'xlsx'])
@@ -350,7 +350,7 @@ if S == True:
 			fig4 = plt.figure(figsize=(10,5))
 			plt.plot(Production, label="production (valeurs observées)", color = 'gold')
 			plt.plot(forcast2, label='production dans '+ str(n) +" "+'jours', color = 'coral')
-			plt.title("Représentation du prix avec les données prédites")
+			plt.title("Représentation de la production avec les données prédites")
 			plt.xlabel("Année")
 			plt.ylabel("Production")
 			plt.legend(loc="upper right")
