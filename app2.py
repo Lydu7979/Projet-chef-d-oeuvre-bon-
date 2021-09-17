@@ -142,6 +142,7 @@ if S == True:
 	DATA_URL =('./DATA/TM20.csv')
 	
 	st.subheader("Choix du nombre de jours pour les prédictions du prix et de la production")
+	
 	n = st.slider('Choisir le nombre de jours pour les prédictions:',1,30) # n correspond au nombre de jours que l'utilisateur choisira pour les prédictions
 	logging.info("Ici, vous pourrez choisir le nombre de jours (entre 1 et 30), que vous voulez pour la prédiction du prix et de la production. Pour choisir le nombre de jours, cliquez sur le point rouge , et faites le glisser vers la droite.")
 	st.write('le nombre de jours choisis pour les prédictions, est:', n)
@@ -301,7 +302,7 @@ if S == True:
 
 	#st.table(df_forecast)
 	if Prédiction == "Prédiction du prix":		
-		choix = st.radio("Choix de la visualisation", ['tableau(valeurs prédites)', 'graphe(valeurs prédites)','graphe(données observées et données prédites)' ])
+		choix = st.radio("Choix de la visualisation", ['tableau(valeurs prédites)', 'graphe(valeurs prédites)','graphe(données historiques et données prédites)' ])
 		if choix == 'tableau(valeurs prédites)':
 			st.dataframe(n_prix)
 			
@@ -317,10 +318,10 @@ if S == True:
 			st.pyplot(fig12)
 
 
-		if choix == 'graphe(données observées et données prédites)':
+		if choix == 'graphe(données historiques et données prédites)':
 			fig3 = plt.figure(figsize=(10,5))
 			plt.plot(Prix, label="prix (valeurs observées)", color = 'darkviolet')
-			plt.plot(forcast, label='prix dans '+ str(n) +" "+'jours', color = 'coral')
+			plt.plot(forcast, label='prix dans '+ str(n) +" "+'jours', color = 'blue')
 			plt.title("Représentation du prix avec les données prédites")
 			plt.xlabel("Année")
 			plt.ylabel("Prix")
@@ -330,7 +331,7 @@ if S == True:
 			
 			
 	if Prédiction == 'Prédiction de la production':
-		choix = st.radio("Choix de la visualisation", ['tableau(valeurs prédites)', 'graphe(valeurs prédites)','graphe(données observées et données prédites)' ])
+		choix = st.radio("Choix de la visualisation", ['tableau(valeurs prédites)', 'graphe(valeurs prédites)','graphe(données historiques et données prédites)' ])
 		if choix == 'tableau(valeurs prédites)':
 			st.dataframe(n_pro)
 
@@ -344,10 +345,10 @@ if S == True:
 			plt.grid(True)
 			st.pyplot(fig13)
 
-		if choix == 'graphe(données observées et données prédites)':
+		if choix == 'graphe(données historiques et données prédites)':
 			fig4 = plt.figure(figsize=(10,5))
 			plt.plot(Production, label="production (valeurs observées)", color = 'gold')
-			plt.plot(forcast2, label='production dans '+ str(n) +" "+'jours', color = 'coral')
+			plt.plot(forcast2, label='production dans '+ str(n) +" "+'jours', color = 'blue')
 			plt.title("Représentation de la production avec les données prédites")
 			plt.xlabel("Année")
 			plt.ylabel("Production")
