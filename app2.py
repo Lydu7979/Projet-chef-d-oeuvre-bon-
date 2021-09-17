@@ -53,9 +53,9 @@ logging.warning("Avant de vous connecter, assurez-vous d'avoir créé votre comp
 def is_well_logged(username, ha_pswd):
 	data = login_user(username,verif(password,ha_pswd))
 	if data:
-		st.success("Connecté(e) tant que {}".format(username))
+		logging.info("Bravo, vous êtes connecté(e) tant que {}. Vous avez accès à l'application.".format(username))
 	else:
-		st.warning("Nom d'utilisateur/mot de passe incorrect") 
+		logging.error("Nom d'utilisateur/mot de passe incorrect") 
 	if data == []:
 		return False
 	else:
@@ -105,7 +105,7 @@ if S == True:
 	#Dat2 = pd.DataFrame(list(mycl2.find()))
 	#Dat2 = Dat2.drop_duplicates(subset= ['index'])
 
-	logging.info("Voici la base de données contenant l'ensemble des données.")
+	logging.info("Voici la base de données contenant l'ensemble des données. Pour la voir, appuyez sur le bouton 'Afficher la base de données'")
 
 	if st.button("Afficher la base de données"):
 		st.dataframe(Dat)
@@ -369,5 +369,5 @@ else:
 		create_usertable()
 		add_userdata(n_user,modi(n_pass))
 		st.success("Vous avez créé votre compte.")
-		st.info("Connectez-vous dans la partie de gauche.")
+		st.info("Connectez-vous dans la partie ou se se trouve la zone 'Connectez-vous'.")
 	
