@@ -171,8 +171,8 @@ if S == True:
 
 	data.rename(columns={"Production quantité \r\ntonne(s)": "Production en tonnes"},inplace=True)
 	#data = data.drop(columns=["Unnamed: 0"])
-	print(data.columns)
-	st.write(data.columns)
+	#print(data.columns)
+	#st.write(data.columns)
 	Prix = data['prix moyen au kg']
 	Production =  data['Production en tonnes']
 				
