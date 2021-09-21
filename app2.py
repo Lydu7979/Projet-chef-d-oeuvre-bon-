@@ -131,15 +131,15 @@ if S == True:
 	
 	#st.info("Ici, le client a accès à la base de données.")
 	#DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
-	#                             'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
-	#DT.to_csv('DATA/TM20.csv',index = False)                              
+	#                           'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
+	#DT.to_csv('DATA/TM21.csv',index = False)                              
 
 	#st.write("Base de données concernant le prix et la production")
 
 	#st.dataframe(Dat2)
 	#st.info("Contrairement à la première base de données, le client verra uniquement la date, avec le prix, la production et l'id.")
 
-	DATA_URL =('./DATA/TM20.csv')
+	DATA_URL =('./DATA/TM21.csv')
 	
 	st.subheader("Choix du nombre de jours pour les prédictions du prix et de la production")
 	
@@ -164,15 +164,15 @@ if S == True:
 
 
 
-	data['Date'] = pd.to_datetime(data['Date'],infer_datetime_format=True)
+	data['Date'] = pd.to_datetime(data['Date'],infer_datetime_format=True,dayfirst=True)
 	data.sort_values(by='Date', ascending=True, inplace = True) 
 	
 	data = data.set_index(['Date'])
 
-	data.rename(columns={"Production quantité \ntonne(s)": "Production en tonnes"},inplace=True)
+	data.rename(columns={"Production quantité \r\ntonne(s)": "Production en tonnes"},inplace=True)
 	#data = data.drop(columns=["Unnamed: 0"])
-	
-	#st.write(data.columns)
+	print(data.columns)
+	st.write(data.columns)
 	Prix = data['prix moyen au kg']
 	Production =  data['Production en tonnes']
 				
@@ -184,6 +184,7 @@ if S == True:
 	action = st.radio('Choix de la représentation graphique',['Représentation graphique des données (prix et production réunis)','Représentation graphique des données séparées'])
 	if action == 'Représentation graphique des données (prix et production réunis)':
 		fig = plt.figure(figsize=(10,5))
+		
 		plt.plot(data.prix_n, label="prix normalisé", color = 'darkviolet')
 		plt.plot(data.production_n, label="production normalisée", color = 'gold')
 		plt.title("Représentation du prix au kilo et de la production")
