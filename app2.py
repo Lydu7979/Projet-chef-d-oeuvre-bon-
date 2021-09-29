@@ -272,10 +272,10 @@ if S == True:
 		#modèles
 	st.subheader("Prédictions du prix et de la production")		
 			
-	mod = pickle.load(open('modèle_ARIMA_Prix2.pkl', 'rb'))
+	mod = pickle.load(open('modèle_ARIMA_Prix3.pkl', 'rb'))
 			
 
-	mod2 = pickle.load(open('modèle_ARIMA_Production2.pkl', 'rb'))
+	mod2 = pickle.load(open('modèle_ARIMA_Production3.pkl', 'rb'))
 
 	forecast,err,ci = mod.forecast(steps= period, alpha = 0.05)
 	n_prix = pd.DataFrame({"Date":pd.date_range(start=datetime.date.today(), periods=period, freq='D'), 'prix dans '+ str(n) +" "+'jours' :list(forecast)})
