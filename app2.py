@@ -142,6 +142,7 @@ if S == True:
 
 	DATA_URL =('./DATA/TM22.csv')
 	
+	
 	st.subheader("Choix du nombre de jours pour les prédictions du prix et de la production")
 	
 	n = st.slider('Choisir le nombre de jours pour les prédictions:',1,30) # n correspond au nombre de jours que l'utilisateur choisira pour les prédictions
