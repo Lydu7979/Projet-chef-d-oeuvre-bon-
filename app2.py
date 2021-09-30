@@ -130,17 +130,17 @@ if S == True:
 	#Dat2 = Dat2.drop_duplicates(subset= ['index'])
 	
 	#st.info("Ici, le client a accès à la base de données.")
-	#DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
-	#                           'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
-	#DT=DT.iloc[pd.to_datetime(DT.Date.astype(str)).argsort()]
-	#DT.to_csv('DATA/TM21.csv',index = False)                              
+	DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
+	                           'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
+	DT=DT.iloc[pd.to_datetime(DT.Date.astype(str)).argsort()]
+	DT.to_csv('DATA/TM22.csv',index = False)                              
 
 	#st.write("Base de données concernant le prix et la production")
 
 	#st.dataframe(Dat2)
 	#st.info("Contrairement à la première base de données, le client verra uniquement la date, avec le prix, la production et l'id.")
 
-	DATA_URL =('./DATA/TM21.csv')
+	DATA_URL =('./DATA/TM22.csv')
 	
 	st.subheader("Choix du nombre de jours pour les prédictions du prix et de la production")
 	
