@@ -235,7 +235,7 @@ if S == True:
 			plt.plot(data["Température maximale en °C"], label="Température maximale en °C", color = 'magenta') 
 			plt.title("Représentation de la température maximale au cours du temps")
 			plt.xlabel("Année")
-			plt.ylabel("Production")
+			plt.ylabel("Température maximale en °C")
 			plt.legend(loc="upper right")
 			plt.grid(True)
 			st.pyplot(fig8)
