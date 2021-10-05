@@ -372,6 +372,6 @@ else:
 	if st.button("Nouveau compte"):
 		create_usertable()
 		add_userdata(n_user,modi(n_pass))
-		st.success("Vous avez créé votre compte.")
+		st.success("Bravo, vous avez créé votre compte.")
 		st.info("Connectez-vous dans la partie ou se se trouve la zone 'Connectez-vous'.")
 	
