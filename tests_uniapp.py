@@ -37,8 +37,8 @@ class Test_url(Test_api):
         
         
 
-        self.driver.find_element_by_xpath(n_name).send_keys("Smaug")
-        self.driver.find_element_by_xpath(p_mdp).send_keys("mumakil")
+        self.driver.find_element_by_xpath(n_name).send_keys("Elzée")
+        self.driver.find_element_by_xpath(p_mdp).send_keys("zou")
         sleep(4)
         self.driver.find_element_by_xpath(l_sub).click()
         sleep(4)
@@ -50,25 +50,27 @@ class Test_url(Test_api):
         p_mdp2 = '//*[@id="root"]/div[1]/div/div/div/div/section[1]/div[1]/div[2]/div[1]/div[3]/div/div[1]/div/input'
 
 
-        self.driver.find_element_by_xpath(n_name2).send_keys("Smaug")
-        self.driver.find_element_by_xpath(p_mdp2).send_keys("mumakil")
+        self.driver.find_element_by_xpath(n_name2).send_keys("Elzée")
+        self.driver.find_element_by_xpath(p_mdp2).send_keys("zou")
         sleep(4)
         self.driver.find_element_by_xpath(p_mdp2).send_keys(Keys.ENTER)
         sleep(4)
 
         #Titre principal de l'application
-
+    
         
         h1_tp = self.driver.find_element_by_css_selector("#application-pour-pr-dire-le-prix-et-la-production-de-tomates").text
         assert "tomates" in h1_tp
 
         #Titre de la base de données
-
+    
+        
         h1_tbdd = self.driver.find_element_by_css_selector("#base-de-donn-es-mongodb").text
         assert "Mongodb" in h1_tbdd
 
         #affichage base de données
-
+    
+        
         self.driver.find_element_by_xpath('//*[@id="root"]/div[1]/div/div/div/div/section[2]/div/div[1]/div[6]/div/button')
 
         
