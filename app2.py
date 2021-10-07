@@ -86,7 +86,6 @@ if S == True:
 	# 	st.markdown(csv_downloader(data), unsafe_allow_html=True)
 	st.title('Application pour prédire le prix et la production de tomates')
 	file = 'Tomate.png'
-	#image = Image.open(file) 
 	st.image(file)
 	st.markdown("L'application qui vous aide à prédire le prix de tomates au kilo, et la production dans le futur.")
 	logging.info("Bienvenue dans l'application.")			
@@ -100,46 +99,27 @@ if S == True:
 	Dat = pd.DataFrame(list(mycl.find()))
 	Dat = Dat.drop(columns=["index"])
 	
-	#db2 = client.Tomates_prix_production_Centre
-	#mycl2 = db2["donnees"]
-	#Dat2 = pd.DataFrame(list(mycl2.find()))
-	#Dat2 = Dat2.drop_duplicates(subset= ['index'])
 
 	logging.info("Voici la base de données contenant l'ensemble des données. Pour la voir, appuyez sur le bouton 'Afficher la base de données'")
 
 	if st.button("Afficher la base de données"):
 		st.dataframe(Dat)
 
-	#st.subheader("Base de données Sql")
-
-	#st.write(bdd_sql())
+	st.subheader("Base de données Utilisateurs")
+	logging.info("Cette zone est réservée aux administrateurs de l'application. En tant que client, vous n'aurez pas accès à cette zone.")
+	U = st.selectbox("Êtes-vous un utilisateur en tant que client, ou un adminisatrateur de l'application ?",['Utilisateur en tant que client',"Administrateur de l'application"])
+	if U == 'Utilisateur en tant que client':
+		st.write("Désolé, cette zone est réservée uniquement, aux administrateurs de l'application.")
+		logging.warning('Désolé, vous ne pouvez pas accèder à cette zone')
+	if U == "Administrateur de l'application":
+		st.write(bdd_sql())
 	
-
-	
-	#st.dataframe(Dat2)
-	#st.info("Ici, vous verrez la base de données avec uniquement la date,le prix, la production et l'id.")
-
-
-
-	#st.dataframe(Dat)
-
-	#db2 = client.Tomates_prix_production_Centre
-	#mycl2 = db2["donnees"]
-
-	#Dat2 = pd.DataFrame(list(mycl2.find()))
-	#Dat2 = Dat2.drop_duplicates(subset= ['index'])
-	
-	#st.info("Ici, le client a accès à la base de données.")
 	#DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
 	#                          'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
 	#DT.rename(columns={"Production quantité \ntonne(s)": "Production quantité tonne(s)"},inplace=True)
 	#DT=DT.iloc[pd.to_datetime(DT.Date.astype(str)).argsort()]
 	#DT.to_csv('DATA/TM23.csv',index = False)                              
 
-	#st.write("Base de données concernant le prix et la production")
-
-	#st.dataframe(Dat2)
-	#st.info("Contrairement à la première base de données, le client verra uniquement la date, avec le prix, la production et l'id.")
 
 	DATA_URL =('./DATA/TM23.csv')
 	
@@ -210,6 +190,7 @@ if S == True:
 			plt.legend(loc="upper right")
 			plt.grid(True)
 			st.pyplot(fig5)
+			st.info("le prix est en euros.")
 		
 		if tache == "production":
 			fig6 = plt.figure(figsize=(10,5))
@@ -360,7 +341,7 @@ if S == True:
 			plt.grid(True)
 			st.pyplot(fig4)
 			
-
+	
 
 		# #st.markdown(csv_downloader(fig2), unsafe_allow_html=True)
 
