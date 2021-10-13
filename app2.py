@@ -107,6 +107,12 @@ if S == True:
 
 	if st.button("Afficher la base de données"):
 		st.dataframe(Dat)
+	
+	#DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
+	#                          'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
+	#DT.rename(columns={"Production quantité \ntonne(s)": "Production quantité tonne(s)"},inplace=True)
+	#DT=DT.iloc[pd.to_datetime(DT.Date.astype(str)).argsort()]
+	#DT.to_csv('DATA/TM24.csv',index = False) 
 
 	st.subheader("Base de données Utilisateurs")
 	Pages = {'Utilisateur en tant que client':Pages_db.User , "Administrateur de l'application" : Pages_db.Admin }
@@ -118,14 +124,6 @@ if S == True:
 	if page == Pages["Administrateur de l'application"]:
 		page.admin()
 	
-	
-	#DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
-	#                          'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
-	#DT.rename(columns={"Production quantité \ntonne(s)": "Production quantité tonne(s)"},inplace=True)
-	#DT=DT.iloc[pd.to_datetime(DT.Date.astype(str)).argsort()]
-	#DT.to_csv('DATA/TM24.csv',index = False)                              
-
-
 	DATA_URL =('./DATA/TM24.csv')
 	
 	st.subheader("Choix du nombre de jours pour les prédictions du prix et de la production")
