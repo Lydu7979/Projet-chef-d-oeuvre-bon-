@@ -28,6 +28,9 @@ from sklearn.preprocessing import MinMaxScaler
 import pickle
 from statsmodels.tsa.arima_model import ARIMAResults
 import datetime
+import Pages_db.User 
+import Pages_db.Admin 
+
 # from pages.dowload_data import download
 logging.basicConfig(filename='demo.log')
 logging.debug('This message should go to the log file')
@@ -106,23 +109,24 @@ if S == True:
 		st.dataframe(Dat)
 
 	st.subheader("Base de données Utilisateurs")
+	Pages = {'Utilisateur en tant que client':Pages_db.User , "Administrateur de l'application" : Pages_db.Admin }
+	selection = st.radio("Êtes-vous un utilisateur en tant que client, ou un adminisatrateur de l'application ?", list(Pages.keys()))
 	logging.info("Cette zone est réservée aux administrateurs de l'application. En tant que client, vous n'aurez pas accès à cette zone.")
-	U = st.selectbox("Êtes-vous un utilisateur en tant que client, ou un adminisatrateur de l'application ?",['Utilisateur en tant que client',"Administrateur de l'application"])
-	if U == 'Utilisateur en tant que client':
-		st.write("Désolé, cette zone est réservée uniquement, aux administrateurs de l'application.")
-		logging.warning('Désolé, vous ne pouvez pas accèder à cette zone')
-	if U == "Administrateur de l'application":
-		st.write(bdd_sql())
+	page = Pages[selection]
+	if page == Pages["Utilisateur en tant que client"]:
+		page.User()
+	if page == Pages["Administrateur de l'application"]:
+		page.admin()
+	
 	
 	#DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
 	#                          'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
 	#DT.rename(columns={"Production quantité \ntonne(s)": "Production quantité tonne(s)"},inplace=True)
 	#DT=DT.iloc[pd.to_datetime(DT.Date.astype(str)).argsort()]
-	#DT.to_csv('DATA/TM23.csv',index = False)                              
+	#DT.to_csv('DATA/TM24.csv',index = False)                              
 
 
-	DATA_URL =('./DATA/TM23.csv')
-	
+	DATA_URL =('./DATA/TM24.csv')
 	
 	st.subheader("Choix du nombre de jours pour les prédictions du prix et de la production")
 	
@@ -139,14 +143,8 @@ if S == True:
 		data = pd.read_csv(DATA_URL)
 		return data
 
-
-
-	#data_load_state = st.text('Téléchargement des données...')
 	data = load_data()
-	#data_load_state.text('Téléchargement des données... terminé!')
-
-
-
+	
 	data['Date'] = pd.to_datetime(data['Date'],infer_datetime_format=True,dayfirst=True)
 	data.sort_values(by='Date', ascending=True, inplace = True) 
 	

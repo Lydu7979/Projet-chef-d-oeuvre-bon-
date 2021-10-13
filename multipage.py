@@ -20,8 +20,8 @@ class MultiPage:
 
     def run(self):
          
-        page = st.sidebar.selectbox(
-            'App Navigation', 
+        page = st.selectbox(
+            'page database Utilisateur', 
             self.pages, 
             format_func=lambda page: page['title']
         )
