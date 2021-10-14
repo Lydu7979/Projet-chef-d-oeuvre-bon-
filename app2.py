@@ -1,5 +1,6 @@
 
 import streamlit as st
+import pytest
 import pandas as pd
 import numpy as np
 import sqlite3
@@ -29,20 +30,11 @@ import pickle
 from statsmodels.tsa.arima_model import ARIMAResults
 import datetime
 import Pages_db.User 
-import Pages_db.Admin 
-
+from Pages_db.Admin import admin
+import config
 # from pages.dowload_data import download
 logging.basicConfig(filename='demo.log')
 logging.debug('This message should go to the log file')
-
-@st.cache
-def csv_downloader(data):
-	csvfile = data.to_csv()
-	b64 = base64.b64encode(csvfile.encode()).decode()
-	new_filename = "new_text_file_{}_.csv".format(timestr)
-	# st.markdown("#### Télécharger fichier ###")
-	href = f'<a href="data:file/csv;base64,{b64}">Cliquer ici!!!</a>'
-	return href
 
 #Partie connexion
 st.sidebar.subheader("Connectez-vous")
@@ -50,7 +42,22 @@ username = st.sidebar.text_input("Nom d'utilisateur")
 password = st.sidebar.text_input("Mot de passe", type = 'password')
 ha_pswd = modi(password)
 st.sidebar.info("Une fois connecté(e). vous aurez accès à l'application.")
-logging.warning("Avant de vous connecter, assurez-vous d'avoir créé votre compte d'utilisateur.")
+#logging.warning("Avant de vous connecter, assurez-vous d'avoir créé votre compte d'utilisateur.")
+#if st.sidebar.button("Créer votre compte"):
+#	username = ""
+#	password = ""
+#	st.subheader("Créer votre compte")
+#	n_user = st.text_input("Utilisateur")
+#	n_pass = st.text_input("MDP", type = 'password')
+#	st.info("Une fois votre nom d'utilisateur et votre mot de passe créés, cliquez sur Nouveau compte.")
+#	if st.button("Nouveau compte"):
+#		create_usertable()
+#		add_userdata(n_user,modi(n_pass))
+#		st.success("Bravo, vous avez créé votre compte.")
+#		st.info("Connectez-vous dans la partie ou se se trouve la zone 'Connectez-vous'.")
+if st.sidebar.button("Déconnexion"):
+	st.stop()
+
 #Condition pour accéder l'application
 @st.cache(suppress_st_warning=True)
 def is_well_logged(username, ha_pswd):
@@ -64,29 +71,16 @@ def is_well_logged(username, ha_pswd):
 	else:
 		return True
 
-
-
+#test pour vérifier la fonction 'is_well_logged'
+def test_is_well_logged():
+	assert is_well_logged('David','Azria') == False
+	#assert is_well_logged('Ludovic', 'Sanne') == True
 
 
 #Condition pour accéder l'application
 S = is_well_logged(username, ha_pswd)
 if S == True:
 
-	# uploaded_file = st.file_uploader("Télécharger un fichier sous le format csv ou excel.", type = ['csv', 'xlsx'])
-	# global data
-	# if uploaded_file is not None:
-	# 	try:
-	# 		data = pd.read_csv(uploaded_file)
-	# 	except Exception as e:
-	# 		print(e)
-	# 		data = pd.read_excel(uploaded_file)
-
-	# 	st.dataframe(data)
-	# 	#data.to_csv('DATA/TM14.csv', index=False)
-	# 	#Da =
-	# 	# tele1 = download(data.to_csv()).tele()
-	# 	#st.write(st.__version__)
-	# 	st.markdown(csv_downloader(data), unsafe_allow_html=True)
 	st.title('Application pour prédire le prix et la production de tomates')
 	file = 'Tomate.png'
 	st.image(file)
@@ -113,16 +107,11 @@ if S == True:
 	#DT.rename(columns={"Production quantité \ntonne(s)": "Production quantité tonne(s)"},inplace=True)
 	#DT=DT.iloc[pd.to_datetime(DT.Date.astype(str)).argsort()]
 	#DT.to_csv('DATA/TM24.csv',index = False) 
-
-	st.subheader("Base de données Utilisateurs")
-	Pages = {'Utilisateur en tant que client':Pages_db.User , "Administrateur de l'application" : Pages_db.Admin }
-	selection = st.radio("Êtes-vous un utilisateur en tant que client, ou un adminisatrateur de l'application ?", list(Pages.keys()))
-	logging.info("Cette zone est réservée aux administrateurs de l'application. En tant que client, vous n'aurez pas accès à cette zone.")
-	page = Pages[selection]
-	if page == Pages["Utilisateur en tant que client"]:
-		page.User()
-	if page == Pages["Administrateur de l'application"]:
-		page.admin()
+    
+	if username == config.super_login and password == config.super_pwd:
+		st.subheader("Base de données Utilisateurs")
+		if st.button("Base de données"):
+			st.write(admin())
 	
 	DATA_URL =('./DATA/TM24.csv')
 	
