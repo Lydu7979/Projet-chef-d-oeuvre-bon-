@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pytest
 import pandas as pd
@@ -42,7 +41,7 @@ username = st.sidebar.text_input("Nom d'utilisateur")
 password = st.sidebar.text_input("Mot de passe", type = 'password')
 ha_pswd = modi(password)
 st.sidebar.info("Une fois connecté(e). vous aurez accès à l'application.")
-#logging.warning("Avant de vous connecter, assurez-vous d'avoir créé votre compte d'utilisateur.")
+logging.warning("Avant de vous connecter, assurez-vous d'avoir créé votre compte d'utilisateur.")
 #if st.sidebar.button("Créer votre compte"):
 #	username = ""
 #	password = ""
