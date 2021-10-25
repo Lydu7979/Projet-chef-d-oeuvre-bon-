@@ -27,8 +27,7 @@ from Sécurité.Safe import modi, verif
 from sklearn.preprocessing import MinMaxScaler
 import pickle
 from statsmodels.tsa.arima_model import ARIMAResults
-import datetime
-import Pages_db.User 
+import datetime 
 from Pages_db.Admin import admin
 import config
 # from pages.dowload_data import download
