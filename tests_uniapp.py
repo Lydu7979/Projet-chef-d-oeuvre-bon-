@@ -41,8 +41,8 @@ class Test_url(Test_api):
         
         #self.driver.find_element_by_xpath('//*[@id="root"]/div[1]/div/div/div/div/section[1]/div[1]/div[2]/div[1]/div[5]/div/button').click()
         #sleep(4)
-        self.driver.find_element_by_xpath(n_name).send_keys("Héra")
-        self.driver.find_element_by_xpath(p_mdp).send_keys("Julie")
+        self.driver.find_element_by_xpath(n_name).send_keys("Tauriel")
+        self.driver.find_element_by_xpath(p_mdp).send_keys("Hopper")
         sleep(4)
         self.driver.find_element_by_xpath(l_sub).click()
         sleep(4)
@@ -53,8 +53,8 @@ class Test_url(Test_api):
         n_name2 = '//*[@id="root"]/div[1]/div/div/div/div/section[1]/div[1]/div[2]/div[1]/div[2]/div/div[1]/div/input'
         p_mdp2 = '//*[@id="root"]/div[1]/div/div/div/div/section[1]/div[1]/div[2]/div[1]/div[3]/div/div[1]/div/input'
 
-        self.driver.find_element_by_xpath(n_name2).send_keys("Héra")
-        self.driver.find_element_by_xpath(p_mdp2).send_keys("Julie")
+        self.driver.find_element_by_xpath(n_name2).send_keys("Tauriel")
+        self.driver.find_element_by_xpath(p_mdp2).send_keys("Hopper")
         sleep(4)
         self.driver.find_element_by_xpath(p_mdp2).send_keys(Keys.ENTER)
         sleep(4)
