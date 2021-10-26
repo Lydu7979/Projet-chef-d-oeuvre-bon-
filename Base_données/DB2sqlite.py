@@ -13,11 +13,11 @@ def bdd_sql():
     dat3 = dat3.drop(["password"], axis = 1)
     dat3 = dat3.drop_duplicates()
     dat3 = dat3.rename(index = str, columns = {'pwd':'password'})
-    dat3.to_csv('Base_données/data_users.csv',index = False) 
+    dat3.to_csv('Base_données/data_users.csv',index = False)
+    dat4 = pd.read_csv('Base_données/data_users.csv') 
     
     conn.close()
-    return dat3
-
+    return dat4
 
 
 
