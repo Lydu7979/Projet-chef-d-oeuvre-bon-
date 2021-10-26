@@ -3,8 +3,6 @@ import pandas as pd
 import hashlib
 
 
-
-
 def bdd_sql():
     conn = sqlite3.connect('data.db')
 
@@ -15,7 +13,8 @@ def bdd_sql():
     dat3 = dat3.rename(index = str, columns = {'pwd':'password'})
     
     conn.close()
-    return dat3 
+    return dat3
+
 
 
 
