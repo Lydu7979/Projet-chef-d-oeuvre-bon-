@@ -2,8 +2,6 @@ import sqlite3
 import pandas as pd
 
 
-
-
 def bdd_sql():
     conn = sqlite3.connect('data.db')
     dat3  = pd.read_sql_query("SELECT * FROM userstable", conn)
