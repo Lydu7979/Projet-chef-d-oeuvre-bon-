@@ -12,7 +12,12 @@ def bdd_sql():
     dat3 = dat3.drop(["password"], axis = 1)
     dat3 = dat3.drop_duplicates()
     dat3 = dat3.rename(index = str, columns = {'pwd':'password'})
-    dat3.to_csv('Base_données/data_users.csv',index = False)
+    dat3['Statut'] = 'utilisateur'
+    dat3['Statut'][8] = 'administrateur'
+    dummy_statut = pd.get_dummies(dat3['Statut']) # le code encode le statut du client.
+    dat3 =  pd.merge(left=dat3,right=dummy_statut,left_index=True,right_index=True,)
+    dat3 = dat3.drop(["Statut"], axis = 1)
+    dat3.to_csv('Base_données/data_users.csv', index = False)
     dat4 = pd.read_csv('Base_données/data_users.csv') 
     
     conn.close()
