@@ -2,4 +2,4 @@
 pwd = 'DODOBO'
 super_login = 'AZER'
 super_pwd = 'AZER45'
-super_pwd_hs = 'ae0dad1ce11a518bed1b4825ffeedec1e15a6197d170988b484c67cbb3351666'
+super_pwd_hs = '5036e4073fc66b3a7c67f0727008465bb1494dd431d75a5ab66e417b37e149b9'

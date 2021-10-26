@@ -72,7 +72,7 @@ def is_well_logged(username, ha_pswd):
 #test pour vérifier la fonction 'is_well_logged'
 def test_is_well_logged():
 	assert is_well_logged('David','Azria') == False
-	#assert is_well_logged('Ludovic', 'Sanne') == True
+	#assert is_well_logged(config.super_login, config.super_pwd_hs) == True
 
 
 #Condition pour accéder l'application
