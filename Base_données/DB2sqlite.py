@@ -3,6 +3,7 @@ import pandas as pd
 import hashlib
 
 
+
 def bdd_sql():
     conn = sqlite3.connect('data.db')
     dat3  = pd.read_sql_query("SELECT * FROM userstable", conn)
@@ -21,7 +22,7 @@ def bdd_sql():
     dat4 = pd.read_csv('Base_données/data_users.csv') 
     
     conn.close()
-    return dat4
+    return dat4 
 
 
 
