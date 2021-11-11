@@ -100,11 +100,11 @@ if S == True:
 	if st.button("Afficher la base de données"):
 		st.dataframe(Dat)
 	
-	DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
-	                          'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
-	DT.rename(columns={"Production quantité \ntonne(s)": "Production quantité tonne(s)"},inplace=True)
-	DT=DT.iloc[pd.to_datetime(DT.Date.astype(str)).argsort()]
-	DT.to_csv('DATA/TM26.csv',index = False) 
+	#DT = pd.DataFrame(Dat, columns = ['Date', 'prix moyen au kg', 'Production quantité \ntonne(s)', 'Température minimale en °C', 
+	#                          'Température maximale en °C', 'précipitations en mm','Ensoleillement en min', 'Rafales (vitesse du vent) en km/h'])
+	#DT.rename(columns={"Production quantité \ntonne(s)": "Production quantité tonne(s)"},inplace=True)
+	#DT=DT.iloc[pd.to_datetime(DT.Date.astype(str)).argsort()]
+	#DT.to_csv('DATA/TM26.csv',index = False) 
     
 	if username == config.super_login and password == config.super_pwd:
 		st.subheader("Base de données Utilisateurs")
