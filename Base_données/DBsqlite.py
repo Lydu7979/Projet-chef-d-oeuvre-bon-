@@ -7,7 +7,7 @@ import sqlite3
 def create_usertable():
 	co = sqlite3.connect("data.db")
 	c = co.cursor()
-	c.execute('CREATE TABLE IF NOT EXISTS userstable(username TEXT,password TEXT)')
+	c.execute('CREATE TABLE IF NOT EXISTS userstable(username TEXT,password TEXT, PRIMARY KEY(username))')
 	c.close()
 
 
