@@ -35,13 +35,32 @@ from statsmodels.tsa.arima_model import ARIMAResults
 import datetime 
 from Pages_db.Admin import admin
 import config
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
+from forms import LoginForm
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+import sqlite3
+logging.basicConfig(filename='demo.log')
+logging.debug('This message should go to the log file')
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=["GET", "POST"])
 
 def index():
-    return render_template('index.html')
+    return render_template('base.html')
+
+@app.route('/login')
+
+def Log():
+    return render_template('login.html', methods=["GET", "POST"])
+
+@app.route('/connection')
+
+def connet():
+    return render_template('connection.html', methods=["GET", "POST"])
+
 
 if __name__ == "__main__":
     app.run(debug=True)

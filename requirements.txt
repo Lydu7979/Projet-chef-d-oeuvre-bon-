@@ -6,3 +6,6 @@ pandas==0.25.0
 chart_studio==1.0.0
 fbprophet==0.5
 statsmodels
+flask
+flask-sqlalchemy
+flask-login
