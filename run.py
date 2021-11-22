@@ -45,19 +45,19 @@ import sqlite3
 logging.basicConfig(filename='demo.log')
 logging.debug('This message should go to the log file')
 
-app = Flask(__name__)
+app2 = Flask(__name__)
 
-@app.route('/', methods=["GET", "POST"])
+@app2.route('/', methods=["GET", "POST"])
 
 def index():
     return render_template('base.html')
 
-@app.route('/login')
+@app2.route('/login')
 
 def Log():
     return render_template('login.html', methods=["GET", "POST"])
 
-@app.route('/connection')
+@app2.route('/connection')
 
 def connet():
     return render_template('connection.html', methods=["GET", "POST"])
