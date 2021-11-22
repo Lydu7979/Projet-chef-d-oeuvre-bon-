@@ -36,10 +36,11 @@ import datetime
 from Pages_db.Admin import admin
 import config
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
-from forms import LoginForm
+from forms import LoginForm, RegisterForm, ResetPasswordForm, NewPasswordForm
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 logging.basicConfig(filename='demo.log')
 logging.debug('This message should go to the log file')
