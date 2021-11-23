@@ -1,8 +1,7 @@
-
+print('Hello')
 import datetime
-from flask import Flask,  jsonify, request, render_template, redirect, url_for
+from flask import Flask, jsonify, request, render_template, redirect, url_for
 from pathlib import Path
-import os
 import os.path
 import pytest
 import pandas as pd
@@ -23,9 +22,8 @@ import base64
 import time
 timestr = time.strftime("%Y%m%d")
 import dns
-import logging
 from Base_données.DBMongo import get_client_mongodb
-from Base_données.DBsqlite import create_usertable, add_userdata, login_user, view_all_users
+#from Base_données.DBsqlite import create_usertable, add_userdata, login_user, view_all_users
 from Base_données.DB2sqlite import bdd_sql
 import seaborn as sns
 from Sécurité.Safe import modi, verif
@@ -35,15 +33,15 @@ from statsmodels.tsa.arima_model import ARIMAResults
 import datetime 
 from Pages_db.Admin import admin
 import config
-from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
-from forms import LoginForm, RegisterForm, ResetPasswordForm, NewPasswordForm
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from flask_sqlalchemy import SQLAlchemy
+#from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
+#from forms import LoginForm, RegisterForm, ResetPasswordForm, NewPasswordForm
+#from flask_wtf import FlaskForm
+#from wtforms import StringField, PasswordField, SubmitField, BooleanField
+#from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+#from flask_sqlalchemy import SQLAlchemy
 import sqlite3
-logging.basicConfig(filename='demo.log')
-logging.debug('This message should go to the log file')
+#logging.basicConfig(filename='demo.log')
+#logging.debug('This message should go to the log file')
 
 app2 = Flask(__name__)
 
@@ -64,5 +62,5 @@ def connet():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app2.run(debug=True)
 
